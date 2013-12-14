@@ -42,4 +42,19 @@ end
 # gem 'capistrano', group: :development
 
 # Use debugger
-# gem 'debugger', group: [:development, :test]
+gem 'debugger', group: [:development, :test]
+
+gem "haml-rails"
+
+group :development, :test do
+  gem 'rspec-rails'
+end
+
+gem 'backbone-on-rails'
+
+
+gem 'haml_coffee_assets'
+
+gem 'execjs'
+
+gem "twitter-bootstrap-rails"

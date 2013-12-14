@@ -1,0 +1,26 @@
+// Place all the styles related to the Products controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.products {
+  #container {
+    width: 900px;
+    margin: 0 auto;   
+    
+    #content {
+      #new_product {
+        .help_inline {
+          display: inline-block;
+        }
+      }
+      
+      .error {
+        color: red;
+
+        input {
+          border-color: red !important;
+        }
+      }
+    }
+  }
+}

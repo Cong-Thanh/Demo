@@ -1,4 +1,6 @@
 Demo::Application.routes.draw do
+  resources :products, only: [:index]
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -53,4 +55,10 @@ Demo::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  namespace :api do
+    namespace :v1 do
+      resources :products, except: [:new, :edit]
+    end
+  end
 end
