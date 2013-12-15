@@ -1,3 +1,13 @@
 = javascript_include_tag "products"
 
 #container
+
+%div{"ng-controller" => "ProductCtrl"}
+  %form{"ng-submit" => "addProduct()"}
+    %input{type: "text", "ng-model" => "newProduct.name"}
+    %input{type: "submit", value: "Add"}
+  %ul
+    %li{"ng-repeat" => "product in products"}
+      {{product.name}}
+      %span{"ng-show" => "product.winner", "ng-class" => "{highlight: product == lastWinner}"} Winner
+  %button{"ng-click" => "drawWinner()"} Draw winner

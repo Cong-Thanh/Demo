@@ -1,4 +1,8 @@
 Demo::Application.routes.draw do
+  resources :phone_books
+
+  resources :tasks, only: [:index, :show]
+
   resources :products, only: [:index]
   
   # The priority is based upon order of creation: first created -> highest priority.
@@ -59,6 +63,7 @@ Demo::Application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :products, except: [:new, :edit]
+      resources :task_items
     end
   end
 end

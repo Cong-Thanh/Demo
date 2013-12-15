@@ -1,0 +1,24 @@
+= javascript_include_tag "products"
+
+%div{"ng-controller" => "TaskItemCtrl"}
+  %form{"ng-submit" => "addTaskItem()"}
+    .field
+      %label Description
+      %input{type: "text", "ng-model" => "newTaskItem.description"}
+    .field  
+      %label Due Date
+      %input{type: "text", "ng-model" => "newTaskItem.due_date", class: "datepicker"}
+    .field
+      %input{type: "submit", value: "Add", class: "btn btn-primary"}
+  %table#products.table.table-striped.table-bordered
+    %thead
+      %tr
+        %th Description
+        %th Due Date
+    %tbody
+      %tr{"ng-repeat" => "task_item in task_items"}
+        %td {{task_item.description}}
+        %td {{task_item.due_date}}
+
+:coffeescript
+  $('.datepicker').datepicker()

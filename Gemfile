@@ -58,3 +58,7 @@ gem 'haml_coffee_assets'
 gem 'execjs'
 
 gem "twitter-bootstrap-rails"
+
+gem 'angularjs-rails'
+
+gem 'bootstrap-datepicker-rails'
