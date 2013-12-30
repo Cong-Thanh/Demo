@@ -50,15 +50,6 @@ group :development, :test do
   gem 'rspec-rails'
 end
 
-gem 'backbone-on-rails'
-
-
-gem 'haml_coffee_assets'
-
-gem 'execjs'
-
 gem "twitter-bootstrap-rails"
 
 gem 'angularjs-rails'
-
-gem 'bootstrap-datepicker-rails'

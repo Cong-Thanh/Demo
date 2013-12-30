@@ -1,3 +1,0 @@
-%td= @product.get('name')
-%td= @product.get('price')
-%td= @product.get('quantity')

@@ -14,4 +14,6 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
-//= require bootstrap-datepicker
+//= require angular
+//= require angular-resource
+//= require phone_books

@@ -1,0 +1,38 @@
+%div{"ng-controller" => "PhoneBookCtrl"}
+  %h3 Contacts
+  %table#products.table.table-bordered.table-hover
+    %thead
+      %tr
+        %th Name
+        %th Phone
+        %th Email
+    %tbody
+      %tr{"ng-repeat" => "contact in contacts", "ng-switch" => "contact.state"}
+        %td{"ng-switch-default" => ""} {{contact.name}}
+        %td{"ng-switch-default" => ""} {{contact.phone}}
+        %td{"ng-switch-default" => ""} 
+          {{contact.email}}
+          .right
+            %button.btn{"ng-click" => "edit(contact)"} Edit
+            %button.btn{"ng-click" => "destroy(contact)"} Delete
+        %td{"ng-switch-when" => "editing", colspan: 3}
+          %form.inline_form{"ng-submit" => "update(contact)"}
+            %input{type: "text", "ng-model" => "contact.edit.name"}
+            %input{type: "text", "ng-model" => "contact.edit.phone"}
+            %input{type: "text", "ng-model" => "contact.edit.email"}
+            %input{type: "submit", value: "Save", class: "btn btn-primary"}
+  %h3 Add contact
+  %form{"ng-submit" => "addContact()"}
+    .field
+      %label Name
+      %input{type: "text", "ng-model" => "newContact.name"}
+    .field  
+      %label Phone
+      %input{type: "text", "ng-model" => "newContact.phone"}
+    .field  
+      %label Email
+      %input{type: "text", "ng-model" => "newContact.email"}
+    .field
+      %input{type: "hidden", "ng-init" => "newContact.phone_book_id=#{@phone_book.id}"}
+    .field
+      %input{type: "submit", value: "Add Contact", class: "btn btn-primary"}
