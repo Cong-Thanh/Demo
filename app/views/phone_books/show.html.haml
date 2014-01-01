@@ -9,7 +9,7 @@
     %tbody
       %tr{"ng-repeat" => "contact in contacts", "ng-switch" => "contact.state"}
         %td{"ng-switch-default" => ""} {{contact.name}}
-        %td{"ng-switch-default" => ""} {{contact.phone}}
+        %td{"ng-switch-default" => ""} {{formatPhoneNumber(contact.phone)}}
         %td{"ng-switch-default" => ""} 
           {{contact.email}}
           .right
@@ -17,22 +17,33 @@
             %button.btn{"ng-click" => "destroy(contact)"} Delete
         %td{"ng-switch-when" => "editing", colspan: 3}
           %form.inline_form{"ng-submit" => "update(contact)"}
-            %input{type: "text", "ng-model" => "contact.edit.name"}
-            %input{type: "text", "ng-model" => "contact.edit.phone"}
-            %input{type: "text", "ng-model" => "contact.edit.email"}
+            %input{type: "text", "ng-model" => "contact.edit.name", required: ""}
+            %input{type: "text", "ng-model" => "contact.edit.phone", required: "", pattern: "\\d{10}", title: "10 digits"}
+            %input{type: "email", "ng-model" => "contact.edit.email", required: ""}
             %input{type: "submit", value: "Save", class: "btn btn-primary"}
   %h3 Add contact
   %form{"ng-submit" => "addContact()"}
     .field
       %label Name
-      %input{type: "text", "ng-model" => "newContact.name"}
+      %input{type: "text", "ng-model" => "newContact.name", required: ""}
     .field  
       %label Phone
-      %input{type: "text", "ng-model" => "newContact.phone"}
+      %input{type: "text", "ng-model" => "newContact.phone", required: "", pattern: "\\d{10}", title: "10 digits"}
     .field  
       %label Email
-      %input{type: "text", "ng-model" => "newContact.email"}
+      %input{type: "email", "ng-model" => "newContact.email", required: ""}
     .field
       %input{type: "hidden", "ng-init" => "newContact.phone_book_id=#{@phone_book.id}"}
     .field
       %input{type: "submit", value: "Add Contact", class: "btn btn-primary"}
+
+:coffeescript
+  app = angular.module("PhoneBook", ["ngResource"])
+
+  app.config ["$httpProvider", (provider) ->
+    provider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
+  ]
+  app.factory "Contact", ($resource) ->
+    $resource("/api/v1/phone_books/#{@phone_book.id}/contacts/:id.json", {id: "@id"}, {update: {method: "PUT"}})
+
+= javascript_include_tag "phone_books"

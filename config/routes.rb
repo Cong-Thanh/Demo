@@ -58,7 +58,9 @@ Demo::Application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :contacts
+      resources  :phone_books, only: [] do
+        resources :contacts
+      end
     end
   end
 end

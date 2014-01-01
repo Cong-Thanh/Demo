@@ -16,4 +16,3 @@
 //= require turbolinks
 //= require angular
 //= require angular-resource
-//= require phone_books

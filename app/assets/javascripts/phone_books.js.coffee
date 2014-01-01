@@ -2,14 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-app = angular.module("PhoneBook", ["ngResource"])
-
-app.config ["$httpProvider", (provider) ->
-  provider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
-]
-app.factory "Contact", ($resource) ->
-  $resource("/api/v1/contacts/:id.json", {id: "@id"}, {update: {method: "PUT"}})
-
 @PhoneBookCtrl = ($scope, Contact) ->
   $scope.contacts = Contact.query()
 
@@ -35,3 +27,7 @@ app.factory "Contact", ($resource) ->
   $scope.destroy = (contact) ->
     contact.$delete()
     $scope.contacts.splice($scope.contacts.indexOf(contact), 1)
+
+  $scope.formatPhoneNumber = (s) ->
+    result = "(" + s.substr(0,3) + ") " + s.substr(3, 3) + "-" + s.substr(6, 4)
+    result

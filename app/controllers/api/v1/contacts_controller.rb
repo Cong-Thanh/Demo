@@ -1,8 +1,9 @@
 class Api::V1::ContactsController < Api::ApiController
   respond_to :json
-
+  before_action :set_phone_book, only: [:index]
+  
   def index
-    respond_with Contact.all
+    respond_with @phone_book.contacts
   end
   
   def show
@@ -25,5 +26,9 @@ class Api::V1::ContactsController < Api::ApiController
 
   def contact_params
     params.require(:contact).permit(:name, :phone, :email, :phone_book_id)
+  end
+
+  def set_phone_book
+    @phone_book = PhoneBook.find(params[:phone_book_id])
   end
 end
