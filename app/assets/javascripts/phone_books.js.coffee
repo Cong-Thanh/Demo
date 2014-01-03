@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-@PhoneBookCtrl = ($scope, Contact) ->
+@PhoneBookCtrl = ["$scope", "Contact", ($scope, Contact) ->
   $scope.contacts = Contact.query()
 
   $scope.addContact = ->
@@ -31,3 +31,4 @@
   $scope.formatPhoneNumber = (s) ->
     result = "(" + s.substr(0,3) + ") " + s.substr(3, 3) + "-" + s.substr(6, 4)
     result
+]

@@ -43,7 +43,9 @@
   app.config ["$httpProvider", (provider) ->
     provider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')
   ]
-  app.factory "Contact", ($resource) ->
-    $resource("/api/v1/phone_books/#{@phone_book.id}/contacts/:id.json", {id: "@id"}, {update: {method: "PUT"}})
 
+  app.factory "Contact", ["$resource", ($resource) ->
+    $resource("/api/v1/phone_books/#{@phone_book.id}/contacts/:id.json", {id: "@id"}, {update: {method: "PUT"}})
+  ]
+  
 = javascript_include_tag "phone_books"
