@@ -1,5 +1,7 @@
 Demo::Application.routes.draw do
-  resources :phone_books, only: [:index, :show]
+  resources :phone_books, only: [:index, :show] do
+    resources :phone_book_receptions, only: [:create]
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

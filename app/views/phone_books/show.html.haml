@@ -1,6 +1,6 @@
 %div{"ng-controller" => "PhoneBookCtrl"}
   %h3 Contacts
-  %table#products.table.table-bordered.table-hover
+  %table.table.table-bordered.table-hover
     %thead
       %tr
         %th Name
@@ -37,6 +37,14 @@
     .field
       %input{type: "submit", value: "Add Contact", class: "btn btn-primary"}
 
+  %h3 Get this PhoneBook
+  %form#receive_phone_book
+    .field
+      %label Your email
+      %input{type: "email", required: ""}
+    .field
+      %input{type: "submit", value: "Receive", class: "btn btn-success"}
+
 :coffeescript
   app = angular.module("PhoneBook", ["ngResource"])
 
@@ -48,4 +56,19 @@
     $resource("/api/v1/phone_books/#{@phone_book.id}/contacts/:id.json", {id: "@id"}, {update: {method: "PUT"}})
   ]
   
+  $("#receive_phone_book").on "submit", =>
+    $.ajax
+      type: 'POST'
+      url: "#{phone_book_phone_book_receptions_path(phone_book_id: @phone_book.id)}"
+      data:
+        phone_book_reception:
+          email: $("#receive_phone_book input[type='email']").val()
+      success: (data) ->
+        if data.status == 200
+          return alert("Please check your email.")
+        else
+          return alert("Something went wrong. Please try again later.")
+      error: (data) ->
+        return alert("Something went wrong. Please try again later.")
+    
 = javascript_include_tag "phone_books"
