@@ -1,4 +1,4 @@
-%div{"ng-controller" => "PhoneBookCtrl"}
+%div#container{"ng-controller" => "PhoneBookCtrl"}
   %h3 Contacts
   %table.table.table-bordered.table-hover
     %thead
@@ -7,7 +7,7 @@
         %th Phone
         %th Email
     %tbody
-      %tr{"ng-repeat" => "contact in contacts", "ng-switch" => "contact.state"}
+      %tr{"ng-repeat" => "contact in contacts | orderBy:'name'", "ng-switch" => "contact.state"}
         %td{"ng-switch-default" => ""} {{contact.name}}
         %td{"ng-switch-default" => ""} {{formatPhoneNumber(contact.phone)}}
         %td{"ng-switch-default" => ""} 
@@ -17,9 +17,9 @@
             %button.btn{"ng-click" => "destroy(contact)"} Delete
         %td{"ng-switch-when" => "editing", colspan: 3}
           %form.inline_form{"ng-submit" => "update(contact)"}
-            %input{type: "text", "ng-model" => "contact.edit.name", required: ""}
-            %input{type: "text", "ng-model" => "contact.edit.phone", required: "", pattern: "\\d{10}", title: "10 digits"}
-            %input{type: "email", "ng-model" => "contact.edit.email", required: ""}
+            %input{type: "text", "ng-model" => "contact.edit.name", required: "", placeholder: "Enter name"}
+            %input{type: "text", "ng-model" => "contact.edit.phone", required: "", pattern: "\\d{10}", title: "10 digits",  placeholder: "Enter phone"}
+            %input{type: "email", "ng-model" => "contact.edit.email", required: "", placeholder: "Enter email"}
             %input{type: "submit", value: "Save", class: "btn btn-primary"}
   %h3 Add contact
   %form{"ng-submit" => "addContact()"}
@@ -37,7 +37,7 @@
     .field
       %input{type: "submit", value: "Add Contact", class: "btn btn-primary"}
 
-  %h3 Get this PhoneBook
+  %h3 Get this Phone Book
   %form#receive_phone_book
     .field
       %label Your email
@@ -46,7 +46,7 @@
       %input{type: "submit", value: "Receive", class: "btn btn-success"}
 
 :coffeescript
-  app = angular.module("PhoneBook", ["ngResource"])
+  app = angular.module("Demo", ["ngResource"])
 
   app.config ["$httpProvider", (provider) ->
     provider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content')

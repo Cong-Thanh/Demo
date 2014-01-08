@@ -2,10 +2,17 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.inline_form {
-  margin-bottom: 0px !important;
+.phone_books {
+  #container {
+    width: 1000px;
+    margin: auto;
 
-  input {
-    margin-bottom: 0px !important;
+    .inline_form {
+      margin-bottom: 0px !important;
+
+      input {
+        margin-bottom: 0px !important;
+      }
+    }
   }
 }
