@@ -65,10 +65,23 @@
           email: $("#receive_phone_book input[type='email']").val()
       success: (data) ->
         if data.status == 200
-          return alert("Please check your email.")
+          $('#myModal .modal-body').text("Please check your email.")
         else
-          return alert("Something went wrong. Please try again later.")
+          $('#myModal .modal-body').text("Something went wrong. Please try again later.")
+        $('#myModal').modal()
       error: (data) ->
-        return alert("Something went wrong. Please try again later.")
+        $('#myModal .modal-body').text("Something went wrong. Please try again later.")
+        $('#myModal').modal()
+
     
 = javascript_include_tag "phone_books"
+
+#myModal.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
+        %h4#myModalLabel.modal-title Message
+      .modal-body
+      .modal-footer
+        %button.btn.btn-default{"data-dismiss" => "modal", type: "button"} OK

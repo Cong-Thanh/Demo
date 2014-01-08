@@ -9,6 +9,6 @@ class PhoneBookNotifier < ActionMailer::Base
   def send_contacts(phone_book_reception)
     @phone_book = phone_book_reception.phone_book
 
-    mail to: phone_book_reception.email, subject: "Contact List"
+    mail to: phone_book_reception.email, subject: "Here is your PhoneBook"
   end
 end
