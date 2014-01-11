@@ -7,3 +7,6 @@
       %th Email
   %tbody
     = render @phone_book.contacts
+
+%p Follow the link below to edit your Phone Book
+= phone_book_url @phone_book.id

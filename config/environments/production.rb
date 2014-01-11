@@ -79,4 +79,6 @@ Demo::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.assets.precompile += %w( phone_books.js )
+
+  config.action_mailer.default_url_options = { :host => ENV['DOMAIN'] }
 end
