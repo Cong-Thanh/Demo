@@ -1,0 +1,19 @@
+//Begin vertex shader
+attribute vec3 aVertexPosition;
+attribute vec2 aTextureCoord;
+uniform mat4 uVMatrix;
+uniform mat4 uPMatrix;
+uniform mat4 uWMatrix;
+varying vec2 vTextureCoord;
+void main(void) {
+  gl_Position = uPMatrix*uVMatrix*uWMatrix*vec4(aVertexPosition, 1.0);
+  vTextureCoord = aTextureCoord;
+}
+--
+//  Hello World Begin fragment shader
+precision mediump float;
+varying vec2 vTextureCoord;
+uniform sampler2D uSampler;
+void main(void) {
+  gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+}

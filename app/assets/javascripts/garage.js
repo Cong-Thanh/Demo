@@ -10,10 +10,14 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
-//= require twitter/bootstrap
-//= require turbolinks
-//= require angular
-//= require angular-resource
-//= require async
+//= require Vector3
+//= require Matrix4
+//= require glMatrix
+//= require webgl
+//= require data
+//= require main
+//= require scene
+//= require effect
+//= require model
+//= require camera
+//= require content

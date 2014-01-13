@@ -1,0 +1,76 @@
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
+attribute vec2 aTextureCoord;
+
+uniform mat4 uVMatrix;
+uniform mat4 uPMatrix;
+
+uniform vec3 uAmbientColor;
+uniform vec3 uPointLightingLocation;
+uniform vec3 uPointLightingColor;
+
+varying vec3 vTextureCoord;
+varying vec3 vLightWeighting;
+
+void main(void) {
+  vec4 mvPosition = uVMatrix * vec4(aVertexPosition, 1.0);
+  gl_Position = uPMatrix * mvPosition;
+  
+  vTextureCoord = vec3(aTextureCoord.st,aVertexPosition.y);
+  
+  vec3 lightDirection = normalize(uPointLightingLocation - mvPosition.xyz);
+  vec3 transformedNormal = aVertexNormal;
+  float directionalLightWeighting = max(dot(transformedNormal, lightDirection), 0.0);
+  directionalLightWeighting = 1.0 - directionalLightWeighting;
+  //vLightWeighting = uAmbientColor + uPointLightingColor * directionalLightWeighting;
+  vLightWeighting = vec3(1.0,1.0,1.0);
+}
+--
+precision mediump float;
+varying vec3 vTextureCoord;
+varying vec3 vLightWeighting;
+
+uniform sampler2D uSampler00;
+uniform sampler2D uSampler01;
+uniform sampler2D uSampler02;
+uniform sampler2D uSampler03;
+
+uniform float min00;
+uniform float max00;
+uniform float min01;
+uniform float max01;
+uniform float min02;
+uniform float max02;
+uniform float min03;
+uniform float max03;
+
+void main(void) {
+  float height = vTextureCoord.z / 3.0;
+  
+  vec4 color00 = texture2D(uSampler00, vec2(vTextureCoord.x, vTextureCoord.y));
+  vec4 color01 = texture2D(uSampler01, vec2(vTextureCoord.x, vTextureCoord.y));
+  vec4 color02 = texture2D(uSampler02, vec2(vTextureCoord.x, vTextureCoord.y));
+  vec4 color03 = texture2D(uSampler03, vec2(vTextureCoord.x, vTextureCoord.y));
+  
+  vec4 finalColor = color03;
+  
+  if(height > min00 && height <= max00)
+    finalColor = color00;
+  if(height > min01 && height <= max01)
+    finalColor = color01;
+  if(height > min02 && height <= max02)
+    finalColor = color02;
+  if(height > min03 && height <= max03)
+    finalColor = color03;   
+  
+  if(height > max00 && height <= min01)
+    finalColor = mix(color00,color01,1.0-(min01-height)/(min01-max00));
+  
+  if(height > max01 && height <= min02)
+    finalColor = mix(color01,color02,1.0-(min02-height)/(min02-max01));
+    
+  if(height > max02 && height <= min03)
+    finalColor = mix(color02,color03,1.0-(min03-height)/(min03-max02));
+  
+  gl_FragColor = vec4(finalColor.rgb * vLightWeighting, finalColor.a);
+}
