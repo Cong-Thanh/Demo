@@ -27,9 +27,9 @@ class @Camera
       @leftRight = 0
 
     if KeyState.currentlyPressedKeys[83] # W
-      @upDown = 1
-    else if KeyState.currentlyPressedKeys[87] # S
       @upDown = -1
+    else if KeyState.currentlyPressedKeys[87] # S
+      @upDown = 1
     else
       @upDown = 0
     
@@ -47,11 +47,36 @@ class @Camera
     else
       @xz = 0
 
-    @position.x += @leftRight
-    @target.x += @leftRight
+    #
+    #[@target.x-@position.x, @target.z-@position.z]
+    #[@position.z-@target.z, @target.x-@position.x]
+    temp1
+    temp3
+
+    if @target.x is @position.x and @target.z isnt @position.z
+      temp1 = [(@position.z - @target.z)/Math.abs(@position.z - @target.z), 0]
+      temp3 = [0, (@target.z - @position.z)/Math.abs(@target.z - @position.z)]
+
+    if @target.z is @position.z and @target.x isnt @position.x
+      temp1 = [0, (@target.x - @position.x)/Math.abs(@target.x - @position.x)]
+      temp3 = [(@target.x - @position.x)/Math.abs(@target.x - @position.x), 0]
     
-    @position.z += @upDown
-    @target.z += @upDown
+    if @target.x isnt @position.x and @target.z isnt @position.z
+      temp = Math.max(Math.abs(@position.z-@target.z), Math.abs(@target.x-@position.x))
+      temp1 = [(@position.z-@target.z)/temp, (@target.x-@position.x)/temp]
+      temp2 = Math.max(Math.abs(@target.x-@position.x), Math.abs(@target.z-@position.z))
+      temp3 = [(@target.x-@position.x)/temp2, (@target.z-@position.z)/temp2]
+
+    #[0,1]
+    #[0, @target.x-@position.x]/[sqrt((@position.z-@target.z)*(@position.z-@target.z))]
+
+    # temp2 = [@leftRight, @upDown]
+    # document.title = temp3[0] + "|" + temp3[1]    
+    
+    @position.x += (temp1[0]*@leftRight + temp3[0]*@upDown)*Global.moveSpeed
+    @target.x += (temp1[0]*@leftRight + temp3[0]*@upDown)*Global.moveSpeed
+    @position.z += (temp1[1]*@leftRight + temp3[1]*@upDown)*Global.moveSpeed
+    @target.z += (temp1[1]*@leftRight + temp3[1]*@upDown)*Global.moveSpeed
 
     unless @xz is 0
       xxx = @position.x - @target.x

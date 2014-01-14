@@ -24,3 +24,4 @@
 //= require terrain
 //= require key_state
 //= require util
+//= require global

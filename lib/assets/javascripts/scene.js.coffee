@@ -30,7 +30,7 @@ class @Scene
       @model = new Model modelData, @content.load["assets/TownHall.jpg"], new Effect @content.load["assets/basic.txt"]
       @camera = new Camera()
       @camera.setProjection(45,gl.viewportWidth/gl.viewportHeight,0.1,50000)
-      @camera.setLookAt(new Vector3(0, 10, 10), new Vector3(0,0,0), new Vector3(0,1,0))
+      @camera.setLookAt(new Vector3(0, 250, -700), new Vector3(0,0,0), new Vector3(0,1,0))
       highLevel = [
         {min: 0, max: 0, texture: @content.load["assets/Water.jpg"]},
         {min: -1, max: 50, texture: @content.load["assets/Grass.png"]},
@@ -48,7 +48,7 @@ class @Scene
 
   draw: ->
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-    @model.draw(@camera, mat4.identity(mat4.create())) if @model
+    @model.draw(@camera, mat4.scale(mat4.identity(mat4.create()), [300,300,300])) if @model
     @terrain.draw(@camera) if @terrain
 
   show: ->
