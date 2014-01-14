@@ -1,7 +1,7 @@
 class @Content
   constructor: (@files) ->
     tasks = []
-    for file in files
+    for file in @files
       do (file) ->
         if file.match /(\w|\W)+(.jpg|.png)/
           tasks.push (callback) ->
@@ -13,21 +13,23 @@ class @Content
               gl.texImage2D gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image
               gl.texParameteri gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR
               gl.texParameteri gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST
+              gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+              gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
               gl.generateMipmap gl.TEXTURE_2D
               gl.bindTexture gl.TEXTURE_2D, null
               result = {}
               result[file] = texture
               callback null, result
-            texture.image.src = "assets/TownHall.jpg"
+            texture.image.src = file
         else
           tasks.push (callback) ->
-            $.get "assets/basic.txt", (data) ->
+            $.get file, (data) ->
               result = {}
               result[file] = data
               callback null, result
 
-    @content = {}
+    @load = {}
     async.parallel tasks, (err, results) =>
       for result in results
         do (result) =>
-          @content = $.extend {}, @content, result
+          @load = $.extend {}, @load, result

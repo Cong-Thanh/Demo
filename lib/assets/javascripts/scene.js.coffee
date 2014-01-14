@@ -1,71 +1,61 @@
 class @Scene
   constructor: (s) ->
-    el = $("#{s}")[0]
-    window.gl = el.getContext("experimental-webgl")
-    gl.viewportWidth = $(el).width()
-    gl.viewportHeight = $(el).height()                
+    $el = $("#{s}")
+    window.gl = $el[0].getContext("experimental-webgl")
+    width = $el.width()
+    height = $el.height()
+    $el.attr("width", width)
+    $el.attr("height", height)
+    gl.viewportWidth = width
+    gl.viewportHeight = height
+    gl.viewport(0, 0, width, height);
     gl.clearColor(0.1, 0.149, 0.237, 1.0)
     gl.enable(gl.DEPTH_TEST)
     
-    @content = new Content(["assets/TownHall.jpg", "assets/basic.txt"])
+    @content = new Content [
+        "assets/basic.txt",
+        "assets/terrain.txt",
+        "assets/TownHall.jpg", 
+        "assets/Water.jpg",
+        "assets/Grass.png",
+        "assets/Snow.jpg",
+        "assets/Highland.png"
+    ]
 
     async.whilst (=>
-      $.isEmptyObject(@content.content)
+      $.isEmptyObject(@content.load)
     ), ((callback) =>
       setTimeout callback, 1000
     ), (err) =>
-      @model = new Model modelData, @content.content["assets/TownHall.jpg"], new Effect @content.content["assets/basic.txt"]
+      @model = new Model modelData, @content.load["assets/TownHall.jpg"], new Effect @content.load["assets/basic.txt"]
       @camera = new Camera()
       @camera.setProjection(45,gl.viewportWidth/gl.viewportHeight,0.1,50000)
-      @camera.setLookAt(new Vector3(0,0, 10), new Vector3(0,0,0), new Vector3(0,1,0))
+      @camera.setLookAt(new Vector3(0, 10, 10), new Vector3(0,0,0), new Vector3(0,1,0))
+      highLevel = [
+        {min: 0, max: 0, texture: @content.load["assets/Water.jpg"]},
+        {min: -1, max: 50, texture: @content.load["assets/Grass.png"]},
+        {min: 100, max: 150, texture: @content.load["assets/Highland.png"]} ,
+        {min: 200, max: 255, texture: @content.load["assets/Snow.jpg"]}
+      ]
+      @terrain = new Terrain(256, 256, 36, 3, new Effect(@content.load["assets/terrain.txt"]), highLevel, heightMap)
 
-    # async.until (=>
-    #   debugger
-    #   $.isEmptyObject(@content.content) == true
-    # ), (callback) ->
-    #   setTimeout callback, 1000
-    # , (err) ->
-    
-    #while $.isEmptyObject(@content.content)
-    #  a = 1
-
-    # debugger
-    # async.parallel [(callback) ->
-    #   texture = gl.createTexture()
-    #   texture.image = new Image()
-    
-    #   texture.image.onload = ->   
-
-    #     gl.pixelStorei gl.UNPACK_FLIP_Y_WEBGL, true
-    #     gl.bindTexture gl.TEXTURE_2D, texture
-    #     gl.texImage2D gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image
-    #     gl.texParameteri gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR
-    #     gl.texParameteri gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST
-    #     gl.generateMipmap gl.TEXTURE_2D
-    #     gl.bindTexture gl.TEXTURE_2D, null
-    #     callback null, texture
-    #   texture.image.src = "assets/TownHall.jpg"
-
-    # , (callback) ->
-    #   $.get "assets/basic.txt", (data) ->
-    #     callback null, data
-
-    # ], (err, results) =>
-    # @model = new Model modelData, results[0], new Effect results[1]
-
-    # @camera = new Camera()
-    # @camera.setProjection(45,gl.viewportWidth/gl.viewportHeight,0.1,50000)
-    # @camera.setLookAt(new Vector3(0,0, 10), new Vector3(0,0,0), new Vector3(0,1,0))
-    
-    # @terrain = new Terrain 256, 256, 36, 3, new Effect 
+    KeyState.load()
 
   loop: =>
-    requestAnimationFrame @loop
-    @drawScene()
-  
-  drawScene: ->
+    requestAnimFrame @loop
+    @update()
+    @draw()
+
+  draw: ->
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     @model.draw(@camera, mat4.identity(mat4.create())) if @model
+    @terrain.draw(@camera) if @terrain
 
   show: ->
     @loop()
+
+  update: ->
+    timeNow = new Date().getTime()
+    elapsed = timeNow - @lastTime
+    @camera.update elapsed if @camera
+    @lastTime = timeNow

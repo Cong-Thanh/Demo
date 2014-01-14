@@ -78,7 +78,7 @@ Demo::Application.configure do
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
 
-  config.assets.precompile += %w( phone_books.js )
+  config.assets.precompile += %w( phone_books.js, garage.js )
 
   config.action_mailer.default_url_options = { :host => ENV['DOMAIN'] }
 end

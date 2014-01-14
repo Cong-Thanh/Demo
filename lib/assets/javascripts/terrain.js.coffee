@@ -1,8 +1,7 @@
-class @Terrain
-  contructor: (@width, @height, @blockScale, @heightScale, @effect, @heightLevel, @heightMap)
+class @Terrain  
+  constructor: (@width, @height, @blockScale, @heightScale, @effect, @heightLevel, @heightMap) ->
     @vertexCountX = @width
     @vertexCountZ = @height
-  
     @GenerateTerrainMesh()
 
   draw: (camera) ->
@@ -191,8 +190,9 @@ class @Terrain
       gl.enableVertexAttribArray shaderProgram.vertexPositionAttribute
       shaderProgram.textureCoordAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord")
       gl.enableVertexAttribArray shaderProgram.textureCoordAttribute
-      shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal")
-      gl.enableVertexAttribArray shaderProgram.vertexNormalAttribute
+      # debugger
+      # shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal")
+      # gl.enableVertexAttribArray shaderProgram.vertexNormalAttribute
       shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix")
       shaderProgram.vMatrixUniform = gl.getUniformLocation(shaderProgram, "uVMatrix")
       shaderProgram.samplerUniform00 = gl.getUniformLocation(shaderProgram, "uSampler00")
@@ -229,36 +229,36 @@ class @Terrain
       X: 0
       Y: 1000
       Z: 0
-
+    # debugger
     gl.uniform3f shaderProgram.ambientColorUniform, ambient.R, ambient.G, ambient.B
     gl.uniform3f shaderProgram.pointLightingLocationUniform, lightPosition.X, lightPosition.Y, lightPosition.Z
     gl.uniform3f shaderProgram.pointLightingColorUniform, point.R, point.G, point.B
-    gl.uniform1f shaderProgram.min00, @heightlevel[0].min
-    gl.uniform1f shaderProgram.max00, @heightlevel[0].max
-    gl.uniform1f shaderProgram.min01, @heightlevel[1].min
-    gl.uniform1f shaderProgram.max01, @heightlevel[1].max
-    gl.uniform1f shaderProgram.min02, @heightlevel[2].min
-    gl.uniform1f shaderProgram.max02, @heightlevel[2].max
-    gl.uniform1f shaderProgram.min03, @heightlevel[3].min
-    gl.uniform1f shaderProgram.max03, @heightlevel[3].max
+    gl.uniform1f shaderProgram.min00, @heightLevel[0].min
+    gl.uniform1f shaderProgram.max00, @heightLevel[0].max
+    gl.uniform1f shaderProgram.min01, @heightLevel[1].min
+    gl.uniform1f shaderProgram.max01, @heightLevel[1].max
+    gl.uniform1f shaderProgram.min02, @heightLevel[2].min
+    gl.uniform1f shaderProgram.max02, @heightLevel[2].max
+    gl.uniform1f shaderProgram.min03, @heightLevel[3].min
+    gl.uniform1f shaderProgram.max03, @heightLevel[3].max
     gl.activeTexture gl.TEXTURE0
-    gl.bindTexture gl.TEXTURE_2D, @heightlevel[0].texture
+    gl.bindTexture gl.TEXTURE_2D, @heightLevel[0].texture
     gl.uniform1i shaderProgram.samplerUniform00, 0
     gl.activeTexture gl.TEXTURE1
-    gl.bindTexture gl.TEXTURE_2D, @heightlevel[1].texture
+    gl.bindTexture gl.TEXTURE_2D, @heightLevel[1].texture
     gl.uniform1i shaderProgram.samplerUniform01, 1
     gl.activeTexture gl.TEXTURE2
-    gl.bindTexture gl.TEXTURE_2D, @heightlevel[2].texture
+    gl.bindTexture gl.TEXTURE_2D, @heightLevel[2].texture
     gl.uniform1i shaderProgram.samplerUniform02, 2
     gl.activeTexture gl.TEXTURE3
-    gl.bindTexture gl.TEXTURE_2D, @heightlevel[3].texture
+    gl.bindTexture gl.TEXTURE_2D, @heightLevel[3].texture
     gl.uniform1i shaderProgram.samplerUniform03, 3
     gl.bindBuffer gl.ARRAY_BUFFER, @vertexPositionBuffer
     gl.vertexAttribPointer shaderProgram.vertexPositionAttribute, @vertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0
     gl.bindBuffer gl.ARRAY_BUFFER, @vertexTextureCoordBuffer
     gl.vertexAttribPointer shaderProgram.textureCoordAttribute, @vertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0
-    gl.bindBuffer gl.ARRAY_BUFFER, @vertexNormalBuffer
-    gl.vertexAttribPointer shaderProgram.vertexNormalAttribute, @vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0
+    # gl.bindBuffer gl.ARRAY_BUFFER, @vertexNormalBuffer
+    # gl.vertexAttribPointer shaderProgram.vertexNormalAttribute, @vertexNormalBuffer.itemSize, gl.FLOAT, false, 0, 0
     gl.bindBuffer gl.ELEMENT_ARRAY_BUFFER, @vertexIndexBuffer
 
   GetPosition: (row, column) =>

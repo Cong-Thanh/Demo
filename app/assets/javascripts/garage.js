@@ -21,3 +21,6 @@
 //= require model
 //= require camera
 //= require content
+//= require terrain
+//= require key_state
+//= require util
