@@ -25,3 +25,4 @@
 //= require key_state
 //= require util
 //= require global
+//= require skybox

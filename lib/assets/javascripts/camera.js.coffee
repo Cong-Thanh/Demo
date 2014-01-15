@@ -47,9 +47,6 @@ class @Camera
     else
       @xz = 0
 
-    #
-    #[@target.x-@position.x, @target.z-@position.z]
-    #[@position.z-@target.z, @target.x-@position.x]
     temp1
     temp3
 
@@ -67,12 +64,6 @@ class @Camera
       temp2 = Math.max(Math.abs(@target.x-@position.x), Math.abs(@target.z-@position.z))
       temp3 = [(@target.x-@position.x)/temp2, (@target.z-@position.z)/temp2]
 
-    #[0,1]
-    #[0, @target.x-@position.x]/[sqrt((@position.z-@target.z)*(@position.z-@target.z))]
-
-    # temp2 = [@leftRight, @upDown]
-    # document.title = temp3[0] + "|" + temp3[1]    
-    
     @position.x += (temp1[0]*@leftRight + temp3[0]*@upDown)*Global.moveSpeed
     @target.x += (temp1[0]*@leftRight + temp3[0]*@upDown)*Global.moveSpeed
     @position.z += (temp1[1]*@leftRight + temp3[1]*@upDown)*Global.moveSpeed
