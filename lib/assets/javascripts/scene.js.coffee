@@ -13,33 +13,33 @@ class @Scene
     gl.enable(gl.DEPTH_TEST)
     
     @content = new Content [
-        "assets/basic.txt",
-        "assets/terrain.txt",
-        "assets/skybox.txt",
-        "assets/TownHall.jpg", 
-        "assets/Water.jpg",
-        "assets/Grass.png",
-        "assets/Snow.jpg",
-        "assets/back.jpg",
-        "assets/front.jpg",
-        "assets/left.jpg",
-        "assets/right.jpg",
-        "assets/top.jpg",
-        "assets/GrassBottom.png",
-        "assets/HumanLumberMill.jpg",
-        "assets/WorkShop.jpg",
-        "assets/HumanBarrack.jpg",
-        "assets/HumanTower.jpg",
-        "assets/Farm.jpg",
-        "assets/Tree.jpg",
-        "assets/HumanTower.jpg",
-        "assets/WomanBlue.jpg",
-        "assets/ManBrown.jpg",
-        "assets/Footman.jpg",
-        "assets/lichkingbody.jpg",
-        "assets/lichkinghead.jpg",
-        "assets/lichkingsword.jpg",
-        "assets/Highland.png"
+        "basic.txt",
+        "terrain.txt",
+        "skybox.txt",
+        "TownHall.jpg", 
+        "Water.jpg",
+        "Grass.png",
+        "Snow.jpg",
+        "back.jpg",
+        "front.jpg",
+        "left.jpg",
+        "right.jpg",
+        "top.jpg",
+        "GrassBottom.png",
+        "HumanLumberMill.jpg",
+        "WorkShop.jpg",
+        "HumanBarrack.jpg",
+        "HumanTower.jpg",
+        "Farm.jpg",
+        "Tree.jpg",
+        "HumanTower.jpg",
+        "WomanBlue.jpg",
+        "ManBrown.jpg",
+        "Footman.jpg",
+        "lichkingbody.jpg",
+        "lichkinghead.jpg",
+        "lichkingsword.jpg",
+        "Highland.png"
     ]
     
     async.whilst (=>
@@ -48,99 +48,99 @@ class @Scene
       setTimeout callback, 1000
     ), (err) =>
       @staticModels = [
-        model: new Model townhall, @content.load["assets/TownHall.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model townhall, @content.load["TownHall.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-630, 0, -630]), [300,300,300]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model lumbermill, @content.load["assets/HumanLumberMill.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model lumbermill, @content.load["HumanLumberMill.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-2430, 0, -270]), [2,2,2]), Util.degToRad(45), [0, 1, 0])
       ,
-        model: new Model workshop, @content.load["assets/WorkShop.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model workshop, @content.load["WorkShop.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-1710, 9, -1710]), [200,200,200]), Util.degToRad(-45), [0, 1, 0])
       ,
-        model: new Model humanbarrack, @content.load["assets/HumanBarrack.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model humanbarrack, @content.load["HumanBarrack.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-1710, 0, 810]), [300,300,300]), Util.degToRad(165), [0, 1, 0])
       ,
-        model: new Model humantower, @content.load["assets/HumanTower.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model humantower, @content.load["HumanTower.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [1170, 0, -1710]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model farm, @content.load["assets/Farm.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model farm, @content.load["Farm.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-270, 0, 990]), [2,2,2]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model farm, @content.load["assets/Farm.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model farm, @content.load["Farm.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-630, 0, 990]), [2,2,2]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model farm, @content.load["assets/Farm.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model farm, @content.load["Farm.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [90, 0, 990]), [2,2,2]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model farm, @content.load["assets/Farm.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model farm, @content.load["Farm.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [450, 0, 990]), [2,2,2]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model farm, @content.load["assets/Farm.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model farm, @content.load["Farm.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-270, 0, -2070]), [2,2,2]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model farm, @content.load["assets/Farm.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model farm, @content.load["Farm.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-630, 0, -2070]), [2,2,2]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model farm, @content.load["assets/Farm.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model farm, @content.load["Farm.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [90, 0, -2070]), [2,2,2]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model farm, @content.load["assets/Farm.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model farm, @content.load["Farm.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [450, 0, -2070]), [2,2,2]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model tree, @content.load["assets/Tree.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model tree, @content.load["Tree.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [450, 0, -2430]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model tree, @content.load["assets/Tree.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model tree, @content.load["Tree.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [90, 0, -2430]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model tree, @content.load["assets/Tree.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model tree, @content.load["Tree.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-270, 0, -2430]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model tree, @content.load["assets/Tree.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model tree, @content.load["Tree.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-630, 0, -2430]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model tree, @content.load["assets/Tree.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model tree, @content.load["Tree.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [450, 0, 1350]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model tree, @content.load["assets/Tree.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model tree, @content.load["Tree.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [90, 0, 1350]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model tree, @content.load["assets/Tree.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model tree, @content.load["Tree.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-270, 0, 1350]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ,
-        model: new Model tree, @content.load["assets/Tree.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new Model tree, @content.load["Tree.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-630, 0, 1350]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ]
 
       @animationModels = [
-        model: new AnimationModel standwoman, @content.load["assets/WomanBlue.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new AnimationModel standwoman, @content.load["WomanBlue.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [450, 0, -990]), [2,2,2]), Util.degToRad(60), [0, 1, 0])
       ,
-        model: new AnimationModel man, @content.load["assets/ManBrown.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new AnimationModel man, @content.load["ManBrown.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-1350, 3, -1782]), [2,2,2]), Util.degToRad(60), [0, 1, 0])
       ,
-        model: new AnimationModel man, @content.load["assets/ManBrown.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new AnimationModel man, @content.load["ManBrown.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-2250, 0, -630]), [2,2,2]), Util.degToRad(90), [0, 1, 0])
       ,
-        model: new AnimationModel footman, @content.load["assets/Footman.jpg"], new Effect @content.load["assets/basic.txt"]
+        model: new AnimationModel footman, @content.load["Footman.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-1530, 0, 342]), [2,2,2]), Util.degToRad(140), [0, 1, 0])
       ]
 
       heromodels = [
         [
-          new AnimationModel herobodystand, @content.load["assets/lichkingbody.jpg"], new Effect @content.load["assets/basic.txt"]
+          new AnimationModel herobodystand, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
         ,
-          new AnimationModel heroheadstand, @content.load["assets/lichkinghead.jpg"], new Effect @content.load["assets/basic.txt"]
+          new AnimationModel heroheadstand, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
         ,
-          new AnimationModel heroweaponstand, @content.load["assets/lichkingsword.jpg"], new Effect @content.load["assets/basic.txt"]
+          new AnimationModel heroweaponstand, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
         ]
       , 
         [
-          new AnimationModel herobodywalk, @content.load["assets/lichkingbody.jpg"], new Effect @content.load["assets/basic.txt"]
+          new AnimationModel herobodywalk, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
         ,
-          new AnimationModel heroheadwalk, @content.load["assets/lichkinghead.jpg"], new Effect @content.load["assets/basic.txt"]
+          new AnimationModel heroheadwalk, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
         ,
-          new AnimationModel heroweaponwalk, @content.load["assets/lichkingsword.jpg"], new Effect @content.load["assets/basic.txt"]
+          new AnimationModel heroweaponwalk, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
         ]
       ]
       @hero = new Hero heromodels
@@ -149,22 +149,22 @@ class @Scene
       @camera.setProjection(45,gl.viewportWidth/gl.viewportHeight,0.1,50000)
       @camera.setLookAt(new Vector3(0, 250, -700), new Vector3(0,0,0), new Vector3(0,1,0))
       highLevel = [
-        {min: 0, max: 0, texture: @content.load["assets/Water.jpg"]},
-        {min: -1, max: 50, texture: @content.load["assets/Grass.png"]},
-        {min: 100, max: 150, texture: @content.load["assets/Highland.png"]} ,
-        {min: 200, max: 255, texture: @content.load["assets/Snow.jpg"]}
+        {min: 0, max: 0, texture: @content.load["Water.jpg"]},
+        {min: -1, max: 50, texture: @content.load["Grass.png"]},
+        {min: 100, max: 150, texture: @content.load["Highland.png"]} ,
+        {min: 200, max: 255, texture: @content.load["Snow.jpg"]}
       ]
-      @terrain = new Terrain(256, 256, 36, 3, new Effect(@content.load["assets/terrain.txt"]), highLevel, heightMap)
+      @terrain = new Terrain(256, 256, 36, 3, new Effect(@content.load["terrain.txt"]), highLevel, heightMap)
       window.terrain = @terrain
       textures = [
-        @content.load["assets/back.jpg"],
-        @content.load["assets/front.jpg"],
-        @content.load["assets/left.jpg"],
-        @content.load["assets/right.jpg"],
-        @content.load["assets/top.jpg"],
-        @content.load["assets/GrassBottom.png"]
+        @content.load["back.jpg"],
+        @content.load["front.jpg"],
+        @content.load["left.jpg"],
+        @content.load["right.jpg"],
+        @content.load["top.jpg"],
+        @content.load["GrassBottom.png"]
       ]
-      @skybox = new Skybox(new Effect(@content.load["assets/skybox.txt"]), textures)
+      @skybox = new Skybox(new Effect(@content.load["skybox.txt"]), textures)
     
     KeyState.load()
 
