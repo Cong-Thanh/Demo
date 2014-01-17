@@ -66,6 +66,8 @@ Demo::Application.routes.draw do
       resources  :phone_books, only: [] do
         resources :contacts
       end
+
+      resources :feedbacks, only: [:create]
     end
   end
 end

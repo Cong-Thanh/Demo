@@ -1,0 +1,39 @@
+// Place all the styles related to the Garage controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#feedback_trigger {
+  display: block;
+  right: -24px;
+  position: fixed;
+  top: 104px;
+  z-index: 99999;
+
+  a {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    display: block;
+    height: 40px;
+    line-height: 42px;
+    margin-left: -27px;
+    padding: 0 12px;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #464368;
+    color: #DDDDDD;
+    cursor: pointer;
+  }
+}
+
+#feedback {
+  form {
+    margin-bottom: 0px !important;
+
+    input, textarea {
+      width: 510px !important;
+    }
+  }
+}
