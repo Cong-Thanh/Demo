@@ -18,21 +18,25 @@ class @Camera
     @farPlane = far
     mat4.perspective @fovy, @aspectRatio, @nearPlane, @farPlane, @pMatrix
 
-  update: (elapsed) ->
-    if KeyState.currentlyPressedKeys[65] # A
-      @leftRight = -1
-    else if KeyState.currentlyPressedKeys[68] # D
-      @leftRight = 1
-    else
-      @leftRight = 0
+  update: (elapsed, posHero) ->
+    # if KeyState.currentlyPressedKeys[65] # A
+    #   @leftRight = -1
+    # else if KeyState.currentlyPressedKeys[68] # D
+    #   @leftRight = 1
+    # else
+    #   @leftRight = 0
 
-    if KeyState.currentlyPressedKeys[83] # W
-      @upDown = -1
-    else if KeyState.currentlyPressedKeys[87] # S
-      @upDown = 1
-    else
-      @upDown = 0
-    
+    # if KeyState.currentlyPressedKeys[83] # W
+    #   @upDown = -1
+    # else if KeyState.currentlyPressedKeys[87] # S
+    #   @upDown = 1
+    # else
+    #   @upDown = 0
+    oldposition = {}
+    oldposition.x = @position.x
+    oldposition.y = @position.y
+    oldposition.z = @position.z
+
     if KeyState.currentlyPressedKeys[74] # J
       @rotxzrate = 0.1
     else if KeyState.currentlyPressedKeys[76] # L
@@ -47,27 +51,34 @@ class @Camera
     else
       @xz = 0
 
-    temp1
-    temp3
+    @position.x += posHero.x - @target.x
+    @position.z += posHero.z - @target.z
+    @position.y += posHero.y + 200 - @target.y
+    @target.x = posHero.x
+    @target.z = posHero.z
+    @target.y = posHero.y + 200
 
-    if @target.x is @position.x and @target.z isnt @position.z
-      temp1 = [(@position.z - @target.z)/Math.abs(@position.z - @target.z), 0]
-      temp3 = [0, (@target.z - @position.z)/Math.abs(@target.z - @position.z)]
+    # temp1
+    # temp3
 
-    if @target.z is @position.z and @target.x isnt @position.x
-      temp1 = [0, (@target.x - @position.x)/Math.abs(@target.x - @position.x)]
-      temp3 = [(@target.x - @position.x)/Math.abs(@target.x - @position.x), 0]
+    # if @target.x is @position.x and @target.z isnt @position.z
+    #   temp1 = [(@position.z - @target.z)/Math.abs(@position.z - @target.z), 0]
+    #   temp3 = [0, (@target.z - @position.z)/Math.abs(@target.z - @position.z)]
+
+    # if @target.z is @position.z and @target.x isnt @position.x
+    #   temp1 = [0, (@target.x - @position.x)/Math.abs(@target.x - @position.x)]
+    #   temp3 = [(@target.x - @position.x)/Math.abs(@target.x - @position.x), 0]
     
-    if @target.x isnt @position.x and @target.z isnt @position.z
-      temp = Math.max(Math.abs(@position.z-@target.z), Math.abs(@target.x-@position.x))
-      temp1 = [(@position.z-@target.z)/temp, (@target.x-@position.x)/temp]
-      temp2 = Math.max(Math.abs(@target.x-@position.x), Math.abs(@target.z-@position.z))
-      temp3 = [(@target.x-@position.x)/temp2, (@target.z-@position.z)/temp2]
+    # if @target.x isnt @position.x and @target.z isnt @position.z
+    #   temp = Math.max(Math.abs(@position.z-@target.z), Math.abs(@target.x-@position.x))
+    #   temp1 = [(@position.z-@target.z)/temp, (@target.x-@position.x)/temp]
+    #   temp2 = Math.max(Math.abs(@target.x-@position.x), Math.abs(@target.z-@position.z))
+    #   temp3 = [(@target.x-@position.x)/temp2, (@target.z-@position.z)/temp2]
 
-    @position.x += (temp1[0]*@leftRight + temp3[0]*@upDown)*Global.moveSpeed
-    @target.x += (temp1[0]*@leftRight + temp3[0]*@upDown)*Global.moveSpeed
-    @position.z += (temp1[1]*@leftRight + temp3[1]*@upDown)*Global.moveSpeed
-    @target.z += (temp1[1]*@leftRight + temp3[1]*@upDown)*Global.moveSpeed
+    # @position.x += (temp1[0]*@leftRight + temp3[0]*@upDown)*Global.moveSpeed
+    # @target.x += (temp1[0]*@leftRight + temp3[0]*@upDown)*Global.moveSpeed
+    # @position.z += (temp1[1]*@leftRight + temp3[1]*@upDown)*Global.moveSpeed
+    # @target.z += (temp1[1]*@leftRight + temp3[1]*@upDown)*Global.moveSpeed
 
     unless @xz is 0
       xxx = @position.x - @target.x
@@ -89,5 +100,10 @@ class @Camera
       @position.x = Math.round(tmp[0])
       @position.y = Math.round(tmp[1])
       @position.z = Math.round(tmp[2])
+
+    if @position.y < @target.y or @position.y > (@target.y + 1500)
+      @position.x = oldposition.x
+      @position.y = oldposition.y
+      @position.z = oldposition.z
 
     mat4.lookAt [@position.x, @position.y, @position.z], [@target.x, @target.y, @target.z], [@upvec.x, @upvec.y, @upvec.z], @vMatrix

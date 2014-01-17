@@ -1,6 +1,6 @@
 Demo::Application.routes.draw do
   
-  get "garage" => 'garage#index', as: 'garage'
+  get "3dworld" => 'garage#index', as: 'garage'
 
   resources :phone_books, only: [:index, :show] do
     resources :phone_book_receptions, only: [:create]

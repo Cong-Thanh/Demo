@@ -26,3 +26,5 @@
 //= require util
 //= require global
 //= require skybox
+//= require animation_model
+//= require hero
