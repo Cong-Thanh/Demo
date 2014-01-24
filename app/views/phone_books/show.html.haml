@@ -1,11 +1,16 @@
 %div#container{"ng-controller" => "PhoneBookCtrl"}
-  %h3 Contacts
+  = form_tag phone_book_path(@phone_book, locale: :en), class: 'locale right' do
+    = select_tag 'set_locale',                         |
+      options_for_select(LANGUAGES, I18n.locale.to_s), |
+      onchange: 'document.location = this.form.action.replace("/en/", "/" + this.value + "/")' |
+
+  %h3= t('.contacts')
   %table.table.table-bordered.table-hover
     %thead
       %tr
-        %th Name
-        %th Phone
-        %th Email
+        %th= t('.name')
+        %th= t('.phone')
+        %th= t('.email')
     %tbody
       %tr{"ng-repeat" => "contact in contacts | orderBy:'name'", "ng-switch" => "contact.state"}
         %td{"ng-switch-default" => ""} {{contact.name}}
@@ -13,37 +18,37 @@
         %td{"ng-switch-default" => ""} 
           {{contact.email}}
           .right
-            %button.btn{"ng-click" => "edit(contact)"} Edit
-            %button.btn{"ng-click" => "destroy(contact)"} Delete
+            %button.btn{"ng-click" => "edit(contact)"}= t('.edit')
+            %button.btn{"ng-click" => "destroy(contact)"}= t('.delete')
         %td{"ng-switch-when" => "editing", colspan: 3}
           %form.inline_form{"ng-submit" => "update(contact)"}
-            %input{type: "text", "ng-model" => "contact.edit.name", required: "", placeholder: "Enter name"}
-            %input{type: "text", "ng-model" => "contact.edit.phone", required: "", pattern: "\\d{10}", title: "10 digits",  placeholder: "Enter phone"}
-            %input{type: "email", "ng-model" => "contact.edit.email", required: "", placeholder: "Enter email"}
-            %input{type: "submit", value: "Save", class: "btn btn-primary"}
-  %h3 Add contact
+            %input{type: "text", "ng-model" => "contact.edit.name", required: "", placeholder: "#{t('.enter') + ' ' + t('.name')}"}
+            %input{type: "text", "ng-model" => "contact.edit.phone", required: "", pattern: "\\d{10}", title: "10 digits",  placeholder: "#{t('.enter') + ' ' + t('.phone')}"}
+            %input{type: "email", "ng-model" => "contact.edit.email", required: "", placeholder: "#{t('.enter') + ' ' + t('.email')}"}
+            %input{type: "submit", value: "#{t('.save')}", class: "btn btn-primary"}
+  %h3= t('.add_contact')
   %form{"ng-submit" => "addContact()"}
     .field
-      %label Name
+      %label= t('.name')
       %input{type: "text", "ng-model" => "newContact.name", required: ""}
     .field  
-      %label Phone
+      %label= t('.phone')
       %input{type: "text", "ng-model" => "newContact.phone", required: "", pattern: "\\d{10}", title: "10 digits"}
     .field  
-      %label Email
+      %label= t('.email')
       %input{type: "email", "ng-model" => "newContact.email", required: ""}
     .field
       %input{type: "hidden", "ng-init" => "newContact.phone_book_id=#{@phone_book.id}"}
     .field
-      %input{type: "submit", value: "Add Contact", class: "btn btn-primary"}
+      %input{type: "submit", value: "#{t('.add')}", class: "btn btn-primary"}
 
-  %h3 Get this Phone Book
+  %h3= t('.get_this_phone_book_via_email')
   %form#receive_phone_book
     .field
-      %label Your email
+      %label= t('.your_email')
       %input{type: "email", required: ""}
     .field
-      %input{type: "submit", value: "Receive", class: "btn btn-success"}
+      %input{type: "submit", value: "#{t('.receive')}", class: "btn btn-success"}
 
 :coffeescript
   app = angular.module("Demo", ["ngResource"])
@@ -65,12 +70,12 @@
           email: $("#receive_phone_book input[type='email']").val()
       success: (data) ->
         if data.status == 200
-          $('#myModal .modal-body').text("Please check your email.")
+          $('#myModal .modal-body').text("#{t('.receive_phone_book.success')}")
         else
-          $('#myModal .modal-body').text("Something went wrong. Please try again later.")
+          $('#myModal .modal-body').text("#{t('.receive_phone_book.error')}")
         $('#myModal').modal()
       error: (data) ->
-        $('#myModal .modal-body').text("Something went wrong. Please try again later.")
+        $('#myModal .modal-body').text("#{t('.receive_phone_book.error')}")
         $('#myModal').modal()
 
     
@@ -81,7 +86,7 @@
     .modal-content
       .modal-header
         %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
-        %h4#myModalLabel.modal-title Message
+        %h4#myModalLabel.modal-title= t('.message')
       .modal-body
       .modal-footer
-        %button.btn.btn-default{"data-dismiss" => "modal", type: "button"} OK
+        %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('.ok')

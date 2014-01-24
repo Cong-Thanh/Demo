@@ -1,0 +1,39 @@
+es:
+  layouts:
+    application:
+      title:                    "Manifestación"
+      feedback:                 "Feedback"
+      tell_us_what_you_think:   "Dinos lo que piensas"
+      email:                    "Email"
+      comment:                  "Comentario"
+      submit_feedback:          "Enviar sus Comentarios"
+
+  phone_books:
+    show:
+      contacts:                         "Contactos"
+      name:                             "Nombre"
+      phone:                            "Teléfono"
+      email:                            "Email"
+      edit:                             "Editar"
+      delete:                           "Borrar"
+      save:                             "Guardar"
+      add_contact:                      "Añadir contacto" 
+      add:                              "Añadir"
+      get_this_phone_book_via_email:    "Obtener esta guía telefónica a través de correo electrónico"
+      your_email:                       "Su correo electrónico"
+      receive:                          "Recibir"
+      receive_phone_book:
+        success:                        "Por favor revise su correo electrónico."
+        error:                          "Algo salió mal. Por favor, inténtelo de nuevo más tarde."
+      message:                          "Mensaje"
+      ok:                               "Bueno"
+      enter:                            "Escribir"
+
+  phone_book_notifier:
+    send_contacts:
+      contacts:         "Contactos"
+      name:             "Nombre"
+      phone:            "Teléfono"
+      email:            "Email"
+      follow_link:      "Siga el enlace de abajo para editar su libro de teléfono"
+    subject:          "Aquí está su guía telefónica"

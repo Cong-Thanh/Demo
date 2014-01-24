@@ -1,12 +1,12 @@
-%h3 Contacts
+%h3= t('.contacts')
 %table{border: "1", style: "border-collapse: collapse; width: 500px;"}
   %thead
     %tr
-      %th Name
-      %th Phone
-      %th Email
+      %th= t('.name')
+      %th= t('.phone')
+      %th= t('.email')
   %tbody
     = render @phone_book.contacts
 
-%p Follow the link below to edit your Phone Book
-= phone_book_url @phone_book.id
+%p= t('.follow_link')
+= phone_book_url id: @phone_book.id, locale: I18n.locale

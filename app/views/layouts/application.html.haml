@@ -1,31 +1,31 @@
 !!!
 %html{"ng-app" => "Demo"}
   %head
-    %title Demo
+    %title= t('.title')
     = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
     = javascript_include_tag "application", "data-turbolinks-track" => true
     = csrf_meta_tags
   %body{class: controller.controller_name}
     = yield
     #feedback_trigger
-      %a{"data-toggle" => "modal", "data-target" => "#feedback"} Feedback
+      %a{"data-toggle" => "modal", "data-target" => "#feedback"}= t('.feedback')
     #feedback.modal.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", role: "dialog", tabindex: "-1"}
       .modal-dialog
         .modal-content
           .modal-header
             %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", type: "button"} ×
-            %h4#myModalLabel.modal-title Tell us what you think
+            %h4#myModalLabel.modal-title= t('.tell_us_what_you_think')
           %form
             .modal-body
               .field  
-                %label Email
+                %label= t('.email')
                 %input{type: "email", required: ""}
               .field
-                %label Comment
+                %label= t('.comment')
                 %textarea{row: 3, required: ""}
             .modal-footer
-              %button.btn.btn-primary#submit_feedback{type: "submit"} Submit Feedback
-              %button.btn.btn-default{"data-dismiss" => "modal", type: "button"} Cancel
+              %button.btn.btn-primary#submit_feedback{type: "submit"}= t('.submit_feedback')
+              %button.btn.btn-default{"data-dismiss" => "modal", type: "button"}= t('.cancel')
 
 :coffeescript
   $('#feedback').on 'show.bs.modal', =>

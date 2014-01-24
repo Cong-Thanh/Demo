@@ -8,6 +8,9 @@ class PhoneBooksController < ApplicationController
   end
 
   def show
+    if params[:set_locale]
+      redirect_to phone_book_path(locale: params[:set_locale], phone_book: @phone_book)
+    end
   end
 
   private
