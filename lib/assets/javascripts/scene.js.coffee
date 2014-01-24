@@ -63,6 +63,9 @@ class @Scene
         model: new Model humantower, @content.load["HumanTower.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [1170, 0, -1710]), [200,200,200]), Util.degToRad(135), [0, 1, 0])
       ,
+        model: new Model humantower, @content.load["HumanTower.jpg"], new Effect @content.load["basic.txt"]
+        matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [1350, 0, -630]), [200,200,200]), Util.degToRad(160), [0, 1, 0])
+      ,
         model: new Model farm, @content.load["Farm.jpg"], new Effect @content.load["basic.txt"]
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-270, 0, 990]), [2,2,2]), Util.degToRad(135), [0, 1, 0])
       ,
