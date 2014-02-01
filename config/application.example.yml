@@ -1,5 +1,5 @@
-name:
-email:
-phone:
+name: "Thanh Nguyen"
+email: "thanh.nguyen.10008@gmail.com"
+phone: "1231231234"
 production:
-  host:
+  host: "thanh-nguyen.herokuapp.com"
