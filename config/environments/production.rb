@@ -80,5 +80,5 @@ Demo::Application.configure do
 
   config.assets.precompile += %w( phone_books.js, garage.js )
 
-  config.action_mailer.default_url_options = { :host => ENV['DOMAIN'] }
+  config.action_mailer.default_url_options = { :host => CONFIG[:host] }
 end
