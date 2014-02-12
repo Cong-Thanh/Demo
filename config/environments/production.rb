@@ -81,4 +81,17 @@ Demo::Application.configure do
   config.assets.precompile += %w( phone_books.js garage.js )
 
   config.action_mailer.default_url_options = {:host => CONFIG[:host]}
+ 
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.smtp_settings = { 
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "example.com",
+    authentication: "plain",
+    user_name: "thanh.nguyen.10008@gmail.com", 
+    password: "nguyencongthanh",
+    enable_starttls_auto: true,
+  }
+  
 end
