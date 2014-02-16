@@ -1,0 +1,31 @@
+.left {
+  float: left;
+ }
+
+ .right {
+  float: right;
+ }
+
+ .clear {
+  clear: both;
+ }
+
+#container {
+  width: 1000px;
+  margin: auto;
+}
+
+#error_explanation {
+  margin: 0 0 20px 0px;
+  color: red;
+  span.title {
+    font-weight: bold;
+    font-style: italic;
+  }
+
+  li {
+    padding-left: 10px;
+    list-style-position: inside;
+    list-style-type: circle;
+  }
+}

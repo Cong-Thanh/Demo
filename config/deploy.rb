@@ -1,4 +1,5 @@
 require "bundler/capistrano"
+require 'sidekiq/capistrano'
 
 server "ec2-54-193-82-143.us-west-1.compute.amazonaws.com", :web, :app, :db, primary: true
 
@@ -18,6 +19,9 @@ set :ssh_options, {:auth_methods => "publickey"}
 set :ssh_options, {:keys => ["/Users/thanh/code/Demo/ThanhNguyen.pem"]}
 
 after "deploy", "deploy:cleanup" # keep only the last 5 releases
+
+set(:sidekiq_cmd) { "bundle exec sidekiq" }
+set(:sidekiq_role) { :app }
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -52,11 +56,14 @@ namespace :deploy do
     end
   end
   before "deploy", "deploy:check_revision"
-end
 
-namespace :unicorn do
-  desc "Stop unicorn"
-  task :stop, :except => { :no_release => true } do
-    run "kill -s `cat  #{deploy_to}/shared/pids/unicorn.pid`"
+  namespace :assets do
+    desc "Precompile assets on local machine and upload them to the server."
+    task :precompile, roles: :web, except: {no_release: true} do
+      run_locally "bundle exec rake assets:precompile"
+      find_servers_for_task(current_task).each do |server|
+        run_locally 'rsync -vr --exclude=".DS_Store" -e "ssh -i /Users/thanh/code/Demo/ThanhNguyen.pem" public/assets #{user}@#{server.host}:#{shared_path}/'
+      end
+    end
   end
 end

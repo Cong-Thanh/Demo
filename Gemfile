@@ -55,3 +55,13 @@ gem "twitter-bootstrap-rails"
 gem 'angularjs-rails'
 
 gem 'rails_12factor', group: :production
+
+gem 'sidekiq'  
+
+gem 'sinatra', require: false
+
+gem 'slim'
+
+gem 'devise'
+
+gem 'devise-async'

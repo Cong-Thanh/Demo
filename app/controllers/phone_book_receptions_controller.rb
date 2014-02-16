@@ -6,7 +6,7 @@ class PhoneBookReceptionsController < ApplicationController
     @reception = @phone_book.phone_book_receptions.build phone_book_reception_params
 
     if @reception.save
-      PhoneBookNotifier.send_contacts(@reception).deliver
+      PhoneBookNotifier.delay.send_contacts(@reception)
       render json: { status: 200 }
     else
       render json: { status: 503 }

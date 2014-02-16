@@ -1,11 +1,18 @@
+require 'sidekiq/web'
+
 Demo::Application.routes.draw do
   
+  devise_for :users
   get "3dworld" => 'garage#index', as: 'garage'
 
   scope '(:locale)' do
     resources :phone_books, only: [:index, :show] do
       resources :phone_book_receptions, only: [:create]
     end
+  end
+
+  authenticate :user, lambda { |u| u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
