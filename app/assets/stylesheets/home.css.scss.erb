@@ -1,0 +1,101 @@
+// Place all the styles related to the Home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.home{
+  background-color: #e8eaf0;
+
+  .nav-tabs {
+    > .active {
+      > a {
+        background-color: #e8eaf0;
+      }
+    }
+  }
+
+  #container {
+    #profile {
+      overflow: hidden;
+      padding: 60px 0 0 0;
+
+      #side-col {
+        #photo {
+          figure {
+            &.portrait {
+              position: relative;
+              display: inline-block;
+              margin: 0 0 28px 30px;
+            }
+
+            &.portrait:before {
+              content: "";
+              position: absolute;
+              display: block;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              background: #fff;
+              -moz-border-radius: 5px;
+              -webkit-border-radius: 5px;
+              -o-border-radius: 5px;
+              -ms-border-radius: 5px;
+              -khtml-border-radius: 5px;
+              border-radius: 5px;
+              -moz-box-shadow: 0 1px 5px #b1b3b8;
+              -webkit-box-shadow: 0 1px 5px #b1b3b8;
+              -o-box-shadow: 0 1px 5px #b1b3b8;
+              box-shadow: 0 1px 5px #b1b3b8;
+              -moz-transform: rotate(5deg);
+              -webkit-transform: rotate(5deg);
+            }
+
+            img {
+              border: 8px solid #fff;
+              position: relative;
+              z-index: 1;
+              display: block;
+              -moz-border-radius: 5px;
+              -webkit-border-radius: 5px;
+              -o-border-radius: 5px;
+              -ms-border-radius: 5px;
+              -khtml-border-radius: 5px;
+              border-radius: 5px;
+              -moz-box-shadow: 0 1px 5px #b1b3b8;
+              -webkit-box-shadow: 0 1px 5px #b1b3b8;
+              -o-box-shadow: 0 1px 5px #b1b3b8;
+              box-shadow: 0 1px 5px #b1b3b8;  
+            }
+
+            .mask {
+              position: absolute;
+              left: -30px;
+              bottom: -28px;
+              width: 113px;
+              height: 109px;
+              background: url(<%= asset_path('mask.png') %>) no-repeat;
+              z-index: 2;
+            }
+          }
+        }
+
+        #contact {
+          font-style: italic;
+          text-align: center;
+          padding-left: 20px;
+        }
+      }
+
+      #content {
+        width: 700px;
+
+        #summary {
+          strong {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+  }
+}

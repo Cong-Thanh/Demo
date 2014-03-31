@@ -1,0 +1,10 @@
+%ul.nav.nav-tabs
+  %li.active
+    %a{href: "#"} Home
+  %li.dropdown
+    %a.dropdown-toggle{"data-toggle" => "dropdown", href: "#"}
+      Demo
+      %span.caret
+    %ul.dropdown-menu
+      %li= link_to "Ruby on Rails - AngularJS", phone_book_path(1), target: "_blank"
+      %li= link_to "HTML5 - 3D", world3d_path, target: "_blank"

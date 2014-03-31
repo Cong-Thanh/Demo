@@ -3,7 +3,7 @@ require 'sidekiq/web'
 Demo::Application.routes.draw do
   
   devise_for :users
-  get "3dworld" => 'garage#index', as: 'garage'
+  get "world3d" => 'world3d#index', as: 'world3d'
 
   scope '(:locale)' do
     resources :phone_books, only: [:index, :show] do
@@ -19,7 +19,7 @@ Demo::Application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  root 'home#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
