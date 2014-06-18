@@ -153,7 +153,7 @@ class @Scene
       
       @other_heroes = {}
 
-      @socket = io.connect("http://192.168.31.131:8080")
+      @socket = io.connect("http://ec2-54-183-105-129.us-west-1.compute.amazonaws.com:8080")
       
       @socket.on "connect", =>
         @socket.emit "add_me", window.name
