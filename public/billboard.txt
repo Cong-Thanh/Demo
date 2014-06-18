@@ -1,0 +1,39 @@
+//Begin vertex shader
+attribute vec3 aVertexPosition;
+attribute vec2 aTextureCoord;
+uniform mat4 uVMatrix;
+uniform mat4 uPMatrix;
+uniform mat4 uWTranslateMatrix;
+uniform mat4 uWRotateMatrix;
+uniform vec3 camPos;
+uniform vec3 upVector;
+uniform float scaleWidth;
+uniform float scaleHeight;
+varying vec2 vTextureCoord;
+void main(void) {
+  vec4 tmp = uWTranslateMatrix*vec4(aVertexPosition, 1.0);
+  vec3 center = tmp.xyz;
+  
+  vec3 eyeVector = center - camPos;
+  vec3 sideVector = cross(eyeVector,upVector);
+  sideVector = normalize(sideVector);
+  
+  vec3 finalPosition = center;
+  
+  tmp = uWRotateMatrix*vec4(aTextureCoord.x-0.5,aTextureCoord.y-0.5,0.0,1.0);
+  
+  finalPosition += (tmp.x)*scaleWidth*sideVector;
+    finalPosition += (tmp.y)*scaleHeight*upVector;
+    
+  vec4 finalPosition4 = vec4(finalPosition, 1.0);
+  gl_Position = uPMatrix*uVMatrix*finalPosition4;
+  vTextureCoord = aTextureCoord;  
+}
+--
+//Begin fragment shader
+precision mediump float;
+varying vec2 vTextureCoord;
+uniform sampler2D uSampler;
+void main(void) {
+  gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+}

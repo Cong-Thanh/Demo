@@ -10,7 +10,7 @@ void main(void) {
   vTextureCoord = aTextureCoord;
 }
 --
-//  Hello World Begin fragment shader
+//Begin fragment shader
 precision mediump float;
 varying vec2 vTextureCoord;
 uniform sampler2D uSampler;

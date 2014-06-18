@@ -1,5 +1,7 @@
 class @Scene
   constructor: (s) ->
+    @stack_bottomleft = {"dir1": "up", "dir2": "right", "push": "top"}
+    PNotify.prototype.options.styling = "bootstrap2"    
     $el = $("#{s}")
     window.gl = $el[0].getContext("experimental-webgl")
     width = $el.width()
@@ -14,6 +16,7 @@ class @Scene
     
     @content = new Content [
         "basic.txt",
+        "billboard.txt",
         "terrain.txt",
         "skybox.txt",
         "TownHall.jpg", 
@@ -39,7 +42,8 @@ class @Scene
         "lichkingbody.jpg",
         "lichkinghead.jpg",
         "lichkingsword.jpg",
-        "Highland.png"
+        "Highland.png",
+        "name.png"
     ]
     
     async.whilst (=>
@@ -129,7 +133,7 @@ class @Scene
         matrix: mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [-1530, 0, 342]), [2,2,2]), Util.degToRad(140), [0, 1, 0])
       ]
 
-      heromodels = [
+      mainheromodels = [
         [
           new AnimationModel herobodystand, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
         ,
@@ -146,7 +150,77 @@ class @Scene
           new AnimationModel heroweaponwalk, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
         ]
       ]
-      @hero = new Hero heromodels
+      
+      @other_heroes = {}
+
+      @socket = io.connect("http://192.168.31.131:8080")
+      
+      @socket.on "connect", =>
+        @socket.emit "add_me", window.name
+
+      @socket.on "current_state", (positions) =>
+        for id of positions
+          billboardmodel = new BillboardModel @createTextImage(positions[id].name), new Effect @content.load["billboard.txt"]
+          heromodels = [
+            [
+              new AnimationModel herobodystand, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
+            ,
+              new AnimationModel heroheadstand, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
+            ,
+              new AnimationModel heroweaponstand, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
+            ]
+          , 
+            [
+              new AnimationModel herobodywalk, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
+            ,
+              new AnimationModel heroheadwalk, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
+            ,
+              new AnimationModel heroweaponwalk, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
+            ]
+          ]
+          hero = new Hero heromodels, undefined, billboardmodel
+          hero.translate = positions[id].translate || new Vector3(0, 0, 0)
+          hero.rotate = positions[id].rotate || new Vector3(0, 0, 0)
+          hero.index = positions[id].index || 0
+          @other_heroes[id] = hero   
+
+      @socket.on "new_client", (id, name) =>
+        billboardmodel = new BillboardModel @createTextImage(name), new Effect @content.load["billboard.txt"]
+        heromodels = [
+          [
+            new AnimationModel herobodystand, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
+          ,
+            new AnimationModel heroheadstand, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
+          ,
+            new AnimationModel heroweaponstand, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
+          ]
+        , 
+          [
+            new AnimationModel herobodywalk, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
+          ,
+            new AnimationModel heroheadwalk, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
+          ,
+            new AnimationModel heroweaponwalk, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
+          ]
+        ]
+        @other_heroes[id] = new Hero heromodels, undefined, billboardmodel
+
+      @socket.on "update_client_position", (id, position) =>
+        @other_heroes[id].translate = position.translate
+        @other_heroes[id].rotate = position.rotate   
+        @other_heroes[id].index = position.index        
+
+      @socket.on "client_left", (id) =>
+        delete @other_heroes[id]
+
+      @socket.on "message", (msg) =>
+        new PNotify
+          text: msg
+          type: "info"
+          addclass: "stack-bottomleft"
+          stack: @stack_bottomleft        
+
+      @hero = new Hero mainheromodels, @socket
 
       @camera = new Camera()
       @camera.setProjection(45,gl.viewportWidth/gl.viewportHeight,0.1,50000)
@@ -184,9 +258,11 @@ class @Scene
     if @animationModels
       for obj in @animationModels
         obj.model.draw(@camera, obj.matrix)
-    @hero.draw(@camera) if @hero
     @terrain.draw(@camera) if @terrain
     @skybox.draw(@camera) if @skybox
+    @hero.draw(@camera) if @hero
+    for id of @other_heroes
+      @other_heroes[id].draw(@camera)
 
   show: ->
     @loop()
@@ -198,5 +274,75 @@ class @Scene
       for obj in @animationModels
         obj.model.update elapsed
     @hero.update(elapsed, @camera, @terrain) if @hero and @camera and @terrain
+    
+    for id of @other_heroes
+      @other_heroes[id].update(elapsed, @camera, @terrain)
+    
     @camera.update(elapsed, @hero.translate) if @camera
     @lastTime = timeNow
+
+  createTextImage: (text) =>
+    image = document.createElement("canvas")
+    ctx = image.getContext("2d")
+    tmpImage = document.createElement("canvas")
+    tmpctx = tmpImage.getContext("2d")
+    tmpctx.font = "bold 22px Arial"
+    tmpctx.textAlign = "left"
+    tmpctx.textBaseline = "top"
+    image.setAttribute "width", 512
+    image.setAttribute "height", 512
+    ctx.fillStyle = "white"
+    ctx.lineWidth = 0
+    ctx.strokeStyle = "white"
+    ctx.save()
+    ctx.font = "bold 49px Arial"
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+    ctx.drawImage @content.load["name.png"].image, 0, 0, 512, 512
+    list = []
+    list.push text  if text.length < 20
+    if text.length >= 20 and text.length < 40
+      j = 20
+
+      while j >= 0
+        if text[j] is " "
+          list.push text.substring(0, j)
+          list.push text.substring(j, text.length)
+          break
+        j--
+    if text.length > 40
+      tmp = undefined
+      j = 20
+
+      while j >= 0
+        if text[j] is " "
+          list.push text.substring(0, j)
+          tmp = j
+          break
+        j--
+      j = tmp + 20
+
+      while j > tmp
+        if text[j] is " "
+          list.push text.substring(tmp, j)
+          list.push text.substring(j, text.length)
+          break
+        j--
+    j = 0
+
+    while j < list.length
+      ctx.fillText list[j], ctx.canvas.width / 2, ctx.canvas.height / 6 + 60 * j - 30
+      j++
+    ctx.restore()
+    newtexture = gl.createTexture()
+    gl.enable gl.TEXTURE_2D
+    gl.pixelStorei gl.UNPACK_FLIP_Y_WEBGL, true
+    gl.bindTexture gl.TEXTURE_2D, newtexture
+    gl.texImage2D gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image
+    gl.texParameteri gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR
+    gl.texParameteri gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST
+    gl.texParameteri gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT
+    gl.texParameteri gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT
+    gl.generateMipmap gl.TEXTURE_2D
+    gl.bindTexture gl.TEXTURE_2D, null
+    newtexture

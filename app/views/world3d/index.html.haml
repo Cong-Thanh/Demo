@@ -22,5 +22,7 @@
         %button.btn.btn-default{"data-dismiss" => "modal", type: "button"} OK
 
 :coffeescript
+  window.name = ""
+  window.name = prompt("Enter your name: ") while window.name == undefined or window.name == "" or window.name == null
   $('#myModal').modal()
   Application.main()

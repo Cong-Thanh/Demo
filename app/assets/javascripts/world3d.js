@@ -10,6 +10,8 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
+//= require socket.io
+//= require pnotify
 //= require Vector3
 //= require Matrix4
 //= require glMatrix
@@ -27,4 +29,5 @@
 //= require global
 //= require skybox
 //= require animation_model
+//= require billboard_model
 //= require hero

@@ -1,8 +1,7 @@
 require "bundler/capistrano"
 require 'sidekiq/capistrano'
 
-# server "ec2-54-193-82-143.us-west-1.compute.amazonaws.com", :web, :app, :db, primary: true
-server "ec2-54-183-107-48.us-west-1.compute.amazonaws.com", :web, :app, :db, primary: true
+server "ec2-54-183-105-129.us-west-1.compute.amazonaws.com", :web, :app, :db, primary: true
 
 set :application, "demo"
 set :user, "ubuntu"

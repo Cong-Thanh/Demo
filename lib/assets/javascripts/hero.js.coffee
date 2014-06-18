@@ -1,5 +1,5 @@
 class @Hero
-  constructor: (@animationModels) ->
+  constructor: (@animationModels, @socket, @billboardModel) ->
     @translate = new Vector3(0, 0, 0)
     @rotate = new Vector3(0, 0, 0)
     @index = 0
@@ -8,10 +8,29 @@ class @Hero
     for model in @animationModels[@index]
       model.draw(camera, mat4.rotate(mat4.scale(mat4.translate(mat4.identity(mat4.create()), [@translate.x, @translate.y, @translate.z]), [1.5,1.5,1.5]), Util.degToRad(@rotate.y), [0, 1, 0]))
 
+    gl.blendFunc gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA
+    gl.enable gl.BLEND
+    tempMatrix = mat4.identity(mat4.create())
+    mat4.translate tempMatrix, [
+      @translate.x
+      @translate.y + 220
+      @translate.z
+    ]
+    @billboardModel.draw camera, tempMatrix, 128, 128, mat4.identity(mat4.create()) if @billboardModel
+    
+
   update: (elapsed, camera, terrain) ->
-    @index = @updateMovement(camera, terrain)
+    a = @index
+    @index = @updateMovement(camera, terrain) if @socket
+    b = @index
     for model in @animationModels[@index]
       model.update elapsed
+
+    if @socket and ((a != b) || (@index == 1))
+      @socket.emit "update_my_position",
+        translate: @translate
+        rotate: @rotate
+        index: @index
 
   updateMovement: (camera, terrain) ->
     @translate.y = terrain.GetHeight(@translate.x, @translate.z)
