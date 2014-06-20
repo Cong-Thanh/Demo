@@ -23,6 +23,9 @@
 
 :coffeescript
   window.name = ""
-  window.name = prompt("Enter your name: ") while window.name == undefined or window.name == "" or window.name == null
+  while window.name == undefined or window.name == "" or window.name == null or window.name == "null"
+    window.name = prompt("Enter your name (maximum 17 characters): ") 
+  window.name = window.name.substring(0, 17)
   $('#myModal').modal()
   Application.main()
+

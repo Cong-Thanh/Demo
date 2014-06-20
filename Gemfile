@@ -66,6 +66,4 @@ gem 'devise'
 
 gem 'devise-async'
 
-gem 'socket.io-rails'
-
 gem 'pnotify-rails'

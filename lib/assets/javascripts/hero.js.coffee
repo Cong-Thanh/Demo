@@ -1,5 +1,5 @@
 class @Hero
-  constructor: (@animationModels, @socket, @billboardModel) ->
+  constructor: (@animationModels, @ws, @billboardModel) ->
     @translate = new Vector3(0, 0, 0)
     @rotate = new Vector3(0, 0, 0)
     @index = 0
@@ -19,18 +19,22 @@ class @Hero
     @billboardModel.draw camera, tempMatrix, 128, 128, mat4.identity(mat4.create()) if @billboardModel
     
 
-  update: (elapsed, camera, terrain) ->
+  update: (elapsed, camera, terrain) =>
     a = @index
-    @index = @updateMovement(camera, terrain) if @socket
+    @index = @updateMovement(camera, terrain) if @ws
     b = @index
     for model in @animationModels[@index]
       model.update elapsed
 
-    if @socket and ((a != b) || (@index == 1))
-      @socket.emit "update_my_position",
-        translate: @translate
-        rotate: @rotate
-        index: @index
+    if @ws and ((a != b) || (@index == 1))
+      @ws.send JSON.stringify
+        e: "update_my_position"
+        d:
+          id: @ws.id
+          position:
+            translate: @translate
+            rotate: @rotate
+            index: @index
 
   updateMovement: (camera, terrain) ->
     @translate.y = terrain.GetHeight(@translate.x, @translate.z)

@@ -10,7 +10,6 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require socket.io
 //= require pnotify
 //= require Vector3
 //= require Matrix4

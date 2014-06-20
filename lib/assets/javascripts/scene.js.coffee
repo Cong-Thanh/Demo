@@ -152,75 +152,92 @@ class @Scene
       ]
       
       @other_heroes = {}
+      console.log "Connecting"
+      @ws = new WebSocket("ws://secret-island-2519.herokuapp.com")
+      @ws.id = 'a' + Math.round(Math.random() * 1000000)
+      @ws.onopen = =>
+        console.log "client connected"
+        @ws.send JSON.stringify
+          e: "add_me"
+          d: 
+            id: @ws.id
+            name: window.name
 
-      @socket = io.connect("http://ec2-54-183-105-129.us-west-1.compute.amazonaws.com:8080")
-      
-      @socket.on "connect", =>
-        @socket.emit "add_me", window.name
+      @ws.onmessage = (event) =>
+        p = JSON.parse(event.data)
+        switch p.e
+          when "current_state"
+            positions = p.d
+            for id of positions
+              billboardmodel = new BillboardModel @createTextImage(positions[id].name), new Effect @content.load["billboard.txt"]
+              heromodels = [
+                [
+                  new AnimationModel herobodystand, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
+                ,
+                  new AnimationModel heroheadstand, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
+                ,
+                  new AnimationModel heroweaponstand, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
+                ]
+              , 
+                [
+                  new AnimationModel herobodywalk, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
+                ,
+                  new AnimationModel heroheadwalk, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
+                ,
+                  new AnimationModel heroweaponwalk, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
+                ]
+              ]
+              hero = new Hero heromodels, undefined, billboardmodel
+              hero.translate = positions[id].translate || new Vector3(0, 0, 0)
+              hero.rotate = positions[id].rotate || new Vector3(0, 0, 0)
+              hero.index = positions[id].index || 0
+              @other_heroes[id] = hero   
 
-      @socket.on "current_state", (positions) =>
-        for id of positions
-          billboardmodel = new BillboardModel @createTextImage(positions[id].name), new Effect @content.load["billboard.txt"]
-          heromodels = [
-            [
-              new AnimationModel herobodystand, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
-            ,
-              new AnimationModel heroheadstand, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
-            ,
-              new AnimationModel heroweaponstand, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
+          when "new_client"
+            id = p.d['id']
+            name = p.d['name']
+            return if @ws.id == id
+            billboardmodel = new BillboardModel @createTextImage(name), new Effect @content.load["billboard.txt"]
+            heromodels = [
+              [
+                new AnimationModel herobodystand, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
+              ,
+                new AnimationModel heroheadstand, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
+              ,
+                new AnimationModel heroweaponstand, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
+              ]
+            , 
+              [
+                new AnimationModel herobodywalk, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
+              ,
+                new AnimationModel heroheadwalk, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
+              ,
+                new AnimationModel heroweaponwalk, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
+              ]
             ]
-          , 
-            [
-              new AnimationModel herobodywalk, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
-            ,
-              new AnimationModel heroheadwalk, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
-            ,
-              new AnimationModel heroweaponwalk, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
-            ]
-          ]
-          hero = new Hero heromodels, undefined, billboardmodel
-          hero.translate = positions[id].translate || new Vector3(0, 0, 0)
-          hero.rotate = positions[id].rotate || new Vector3(0, 0, 0)
-          hero.index = positions[id].index || 0
-          @other_heroes[id] = hero   
+            @other_heroes[id] = new Hero heromodels, undefined, billboardmodel
+            
+          when "update_client_position"
+            id = p.d['id']
+            position = p.d['position']
+            return if @ws.id == id
+            @other_heroes[id].translate = position.translate
+            @other_heroes[id].rotate = position.rotate   
+            @other_heroes[id].index = position.index        
+            
+          when "client_left"
+            id = p.d
+            delete @other_heroes[id]
 
-      @socket.on "new_client", (id, name) =>
-        billboardmodel = new BillboardModel @createTextImage(name), new Effect @content.load["billboard.txt"]
-        heromodels = [
-          [
-            new AnimationModel herobodystand, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
-          ,
-            new AnimationModel heroheadstand, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
-          ,
-            new AnimationModel heroweaponstand, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
-          ]
-        , 
-          [
-            new AnimationModel herobodywalk, @content.load["lichkingbody.jpg"], new Effect @content.load["basic.txt"]
-          ,
-            new AnimationModel heroheadwalk, @content.load["lichkinghead.jpg"], new Effect @content.load["basic.txt"]
-          ,
-            new AnimationModel heroweaponwalk, @content.load["lichkingsword.jpg"], new Effect @content.load["basic.txt"]
-          ]
-        ]
-        @other_heroes[id] = new Hero heromodels, undefined, billboardmodel
-
-      @socket.on "update_client_position", (id, position) =>
-        @other_heroes[id].translate = position.translate
-        @other_heroes[id].rotate = position.rotate   
-        @other_heroes[id].index = position.index        
-
-      @socket.on "client_left", (id) =>
-        delete @other_heroes[id]
-
-      @socket.on "message", (msg) =>
-        new PNotify
-          text: msg
-          type: "info"
-          addclass: "stack-bottomleft"
-          stack: @stack_bottomleft        
-
-      @hero = new Hero mainheromodels, @socket
+          when "message"
+            msg = p.d
+            new PNotify
+              text: msg
+              type: "info"
+              addclass: "stack-bottomleft"
+              stack: @stack_bottomleft        
+          
+      @hero = new Hero mainheromodels, @ws
 
       @camera = new Camera()
       @camera.setProjection(45,gl.viewportWidth/gl.viewportHeight,0.1,50000)

@@ -57,13 +57,6 @@ namespace :deploy do
   end
   before "deploy", "deploy:check_revision"
   
-  desc "Run Nodejs"
-  task :run_nodejs, roles: :web do
-    run "cd #{current_path} && npm install"
-    run "cd #{current_path} && node_modules/coffee-script/bin/coffee server.coffee"
-  end
-  after "deploy:restart", "deploy:run_nodejs"
-
   namespace :assets do
     desc "Precompile assets on local machine and upload them to the server."
     task :precompile, roles: :web, except: {no_release: true} do
