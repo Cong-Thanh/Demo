@@ -1,0 +1,17 @@
+- if params[:page] != 0
+  = link_to "Prev", tpb_query_path(q: params[:q], category: params[:category], page: params[:page] - 1)
+%span= params[:page]
+= link_to "Next", tpb_query_path(q: params[:q], category: params[:category], page: params[:page] + 1)
+
+%table#results.table.table-bordered
+  %tr
+    %th Title
+    %th Magnet Link
+    %th Category
+    %th URL
+  - results.each do |result|
+    %tr
+      %td= result[:title]
+      %td= link_to "Copy", result[:magnet_link], class: "magnet-link"
+      %td= result[:category]
+      %td= link_to "Link", "http://thepiratebay.se#{result[:url]}"

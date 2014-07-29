@@ -67,3 +67,5 @@ gem 'devise'
 gem 'devise-async'
 
 gem 'pnotify-rails'
+
+gem 'thepiratebay'

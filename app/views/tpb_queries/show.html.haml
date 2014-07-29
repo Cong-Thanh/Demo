@@ -1,0 +1,14 @@
+#container{style: "margin-top: 20px; width: 640px;"}
+  = form_tag tpb_query_path, id: "tpb-form", method: :get do
+    = text_field_tag "q", params[:q]
+    = select_tag "category", options_for_select(ThePirateBay::Category.constants.map { |t| [t.to_s,  ThePirateBay::Category.const_get(t)] }, params[:category]), include_blank: true
+    = submit_tag 'Search', class: "btn", disable_with: "Search...", style: "margin-bottom: 10px;"
+  #tpb-container
+    = render partial: "results", layout: false, locals: {results: @results} if @results.any?
+
+:coffeescript
+  $(document).ready ->
+    $(".magnet-link").on "click", (e) ->
+      e.preventDefault()
+
+    $("#feedback_trigger").hide()
