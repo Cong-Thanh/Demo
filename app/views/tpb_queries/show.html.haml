@@ -1,14 +1,67 @@
-#container{style: "margin-top: 20px; width: 640px;"}
-  = form_tag tpb_query_path, id: "tpb-form", method: :get do
-    = text_field_tag "q", params[:q]
-    = select_tag "category", options_for_select(ThePirateBay::Category.constants.map { |t| [t.to_s,  ThePirateBay::Category.const_get(t)] }, params[:category]), include_blank: true
-    = submit_tag 'Search', class: "btn", disable_with: "Search...", style: "margin-bottom: 10px;"
-  #tpb-container
-    = render partial: "results", layout: false, locals: {results: @results} if @results.any?
+!!!
+%html
+  %head
+    %meta{content: "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}
+    %title TPB
+    %link{href: "./css/bootstrap.css", media: "all", rel: "stylesheet"}
+    %link{href: "./css/bootstrap-theme.css", media: "all", rel: "stylesheet"}
+    %meta{content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no", name: "viewport"}
+    = javascript_include_tag "application"
+  %body
+    .container-fluid{style: "position: fixed; top: 0px; background: white; z-index: 1000;"}
+      = form_tag tpb_query_path, remote: true, role: "form", style: "top: 0;" do
+        .form-group
+          .row
+            .col-xs-8.col-md-8
+              .input-group
+                = text_field_tag "q", params[:q], class: "form-control", style: "width: 100%;"
+                = hidden_field_tag :authenticity_token, form_authenticity_token
+                .input-group-addon
+                  %a#search-btn{href: "#"}
+                    %span.glyphicon.glyphicon-search
+            .col-xs-4.col-md-4
+              = select_tag "category", options_for_select(ThePirateBay::Category.constants.map { |t| [t.to_s,  ThePirateBay::Category.const_get(t)] }, params[:category]), include_blank: true, style: "width: 100%;", class: "form-control"
 
-:coffeescript
-  $(document).ready ->
-    $(".magnet-link").on "click", (e) ->
-      e.preventDefault()
+    .container-fluid{style: "margin-top: 50px;"}
+      .row
+        .col-xs-12.col-md-12
+          %table.table.table-bordered{style: "margin-bottom: 5px;"}
+            %tbody
+          %div{style: "text-align: center;"}
+            %img#loading{src: "ajax-loader.gif", style: "visibility:hidden;"}
 
-    $("#feedback_trigger").hide()
+    :coffeescript
+      $(document).ready ->
+        loading = false
+        page = 0
+        initialized = false
+
+        window.scrollTo(0,0)
+        
+        $("#search-btn").on "click", (e) ->
+          e.preventDefault()
+          $(this).parents("form").submit()
+
+        $("form").on "ajax:success", (e, data, status, xhr) ->
+          $("table > tbody").html(xhr.responseText)
+          initialized = true
+
+        $(window).scroll ->
+          if $(window).scrollTop() + 40 >= $(document).height() - $(window).height() and not loading and initialized
+            loading = true
+            page++
+            $("#loading").css "visibility", "visible"
+            $.ajax
+              type: "POST"
+              url: "#{tpb_query_path}"
+              data:
+                q: $("#q").val()
+                category: $("#category").val()
+                page: page
+                authenticity_token: $("#authenticity_token").val()
+              success: (response) ->
+                loading = false
+                $("#loading").css "visibility", "hidden"
+                $("table > tbody").append(response)
+              error: (response, data, error) ->
+                alert error

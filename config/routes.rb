@@ -15,7 +15,7 @@ Demo::Application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
-  resource :tpb_query, only: [:show]
+  resource :tpb_query, only: [:show, :create]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
