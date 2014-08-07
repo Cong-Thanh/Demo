@@ -2,6 +2,8 @@ require 'sidekiq/web'
 
 Demo::Application.routes.draw do
   
+  resource :code_sample, only: [:show]
+
   devise_for :users
   get "world3d" => 'world3d#index', as: 'world3d'
 

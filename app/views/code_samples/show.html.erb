@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calendar</title>
+    <%= stylesheet_link_tag "/event" %>
+    <%= stylesheet_link_tag "/css/bootstrap" %>
+    <%= stylesheet_link_tag "/css/bootstrap-theme" %>
+    <%= javascript_include_tag "http://fb.me/react-0.11.1.js" %>
+    <%= javascript_include_tag "http://fb.me/JSXTransformer-0.11.1.js" %>
+  </head>
+  <body>
+    <div id="content"></div>
+    <script type="text/jsx">
+        /** @jsx React.DOM */
+        // The above declaration must remain intact at the top of the script.
+        var data = [
+          {title: "Sample Item", location: "Sample Location", start: 30, end: 150},
+          {title: "Sample Item", location: "Sample Location", start: 540, end: 600},
+          {title: "Sample Item", location: "Sample Location", start: 560, end: 620},
+          {title: "Sample Item", location: "Sample Location", start: 610, end: 670}
+        ];
+        var TimeNode = React.createClass({
+          pad: function(n, width) {
+            n = n + '';
+            return n.length >= width ? n : new Array(width - n.length + 1).join("0") + n;
+          },
+          render: function() {
+            var time = this.props.time;
+            var hour = (Math.floor(time / 60) + 9);
+            var minute = time % 60;
+            var period = "AM";
+            if (hour >= 12) {
+              if (hour > 12)
+                hour = hour % 12;
+              period = "PM";
+            } else {
+              hour = hour % 12;
+            }
+            if (minute === 0) {
+              return (
+                <div className="time">
+                  <span className="full">
+                    {hour + ":" + this.pad(minute, 2) + " "}
+                  </span>
+                  <span className="period">
+                    {period}
+                  </span>
+                </div>
+              );
+            }
+            return (
+              <div className="time">
+                <span className="half">
+                  {hour + ":" + this.pad(minute, 2)}
+                </span>
+              </div>
+            );
+          }
+        }); 
+        var TimeLine = React.createClass({
+          render: function() {
+            var i = 0, a = 12 * 60, timeNodes = [];
+            while (i <= a)
+            {
+              timeNodes.push(
+                <TimeNode time={i}>
+                </TimeNode>
+              );
+              i += 30;
+            }
+            return (
+              <div className="timeLine">
+                  {timeNodes}
+              </div>
+            );
+          }
+        });
+        var EventNode = React.createClass({
+          handleRemove: function() {
+            this.props.onEventRemove(this.props.event);
+          },
+          render: function() {
+            event = this.props.event;
+            var eventStyle = {
+              top: event.start,
+              left: 600 / (event.max_col + 1) * event.col,
+              width: 600 / (event.max_col + 1) - 1,
+              height: event.end - event.start - 2
+            };
+
+            return (
+              <div className="event" style={eventStyle}>
+                <div className="name">
+                    {event.title}
+                </div>
+                <div className="location">
+                    {event.location}
+                </div>
+                <div className="remove" onClick={this.handleRemove}>
+                  <span className="glyphicon glyphicon-remove"></span>
+                </div>
+              </div>
+            );
+          }
+        });
+        var EventList = React.createClass({
+          populateCollisionEvents: function(events) {
+            for (var i = 0; i < events.length; i++) {
+              events[i].collision_events = [];
+              events[i].visited = false;
+            }
+            for (var i = 0; i < events.length - 1; i++) {
+              for (var j = i + 1; j < events.length; j++)
+              {
+                if (events[i].start < events[j].start && events[j].start < events[i].end || events[i].start === events[j].start)
+                {
+                  events[i].collision_events.push(events[j]);
+                  events[j].collision_events.push(events[i]);
+                }
+              }
+            }
+          },
+          DFS: function(event, event_array) {
+            event.visited = true;
+            event_array.push(event);
+            for (var i = 0; i < event.collision_events.length; i++)
+            {
+              if (!event.collision_events[i].visited) {
+                this.DFS(event.collision_events[i], event_array);
+              }
+            }
+          },
+          render: function() {
+            var events = this.props.events;
+            events.sort(function(a, b) {
+                return a.start - b.start;
+            });
+                this.populateCollisionEvents(events);
+                var column_count = 0;
+                var columns = [];
+                for (var i = 0; i < events.length; i++)
+                {
+                    var col = columns.map(function(v) {
+                        return v <= events[i].start;
+                    }).indexOf(true);
+                    if (columns.length > 0 && col !== -1) {
+                        events[i].col = col;
+                        columns[col] = events[i].end;
+                    } else {
+                        events[i].col = column_count;
+                        columns[column_count++] = events[i].end;
+                    }
+                }
+                for (var i = 0; i < events.length; i++)
+                {
+                    if (!events[i].visited)
+                    {
+                        var event_array = [];
+                        this.DFS(events[i], event_array);
+                        var max_col = Math.max.apply(null, event_array.map(function(e) {
+                            return e.col;
+                        }));
+                        event_array.map(function(e) {
+                            e.max_col = max_col;
+                        });
+                    }
+                }
+                var eventList = this;
+                var eventNodes = events.map(function (event) {
+                  return (
+                    <EventNode event={event} onEventRemove={eventList.props.onEventRemove} />
+                  );
+                });
+            return (
+              <div className="eventList">
+                {eventNodes}
+              </div>
+            );
+          }
+        });
+        var EventForm = React.createClass({
+          handleSubmit: function() {
+            var title = this.refs.title.getDOMNode().value.trim();
+            var location = this.refs.location.getDOMNode().value.trim();
+            var start = this.refs.start.getDOMNode().value.trim();
+            var end = this.refs.end.getDOMNode().value.trim();
+
+            this.props.onEventSubmit({title: title, location: location, start: start, end: end});
+
+            this.refs.title.getDOMNode().value = '';
+            this.refs.location.getDOMNode().value = '';
+            this.refs.start.getDOMNode().value = '';
+            this.refs.end.getDOMNode().value = '';
+            return false;
+          },
+          render: function() {
+            return (
+              <form className="eventForm" onSubmit={this.handleSubmit} role="form">
+                <div className="form-group">
+                  <div className="input-group">
+                    <input type="text" ref="title" className="form-control" placeholder="Event Title" required />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="input-group">
+                    <input type="text" ref="location" className="form-control" placeholder="Location" required />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="input-group">
+                    <input type="number" ref="start" className="form-control" placeholder="Start" min="0" max="720"/>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <div className="input-group">
+                    <input type="number" ref="end" className="form-control" placeholder="End" min="0" max="720" />
+                  </div>
+                </div>
+                <input type="submit" value="Add" className="btn btn-primary"/>
+                <p>
+                  <i>Hover over events to remove</i>
+                </p>
+              </form>
+            );
+          }
+        });
+        var EventBox = React.createClass({        
+          handleEventRemove: function(event) {
+            var events = this.state.events;
+            var index = events.indexOf(event);
+            events.splice(index, 1);
+            this.setState({events: events});
+          },
+          handleEventSubmit: function(event) {
+            var events = this.state.events;
+            this.setState({events: events.concat([event])});
+          },
+          getInitialState: function() {
+            return {events: []};
+          },
+          componentDidMount: function() {
+            this.setState({events: data});
+          },
+          render: function() {
+            return (
+              <div className="eventBox">
+                <TimeLine />
+                <EventList events={this.state.events} onEventRemove={this.handleEventRemove} />
+                <EventForm onEventSubmit={this.handleEventSubmit} />
+                <div className="clearFix"></div>
+              </div>
+            );
+          }
+        });
+        React.renderComponent(
+          <EventBox />,
+          document.getElementById('content')
+        );
+    </script>
+  </body>
+</html>
+
+    
+   
