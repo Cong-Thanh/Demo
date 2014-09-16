@@ -20,8 +20,8 @@ set :ssh_options, {:keys => ["/Users/thanh/code/Demo/ThanhNguyen.pem"]}
 
 after "deploy", "deploy:cleanup" # keep only the last 5 releases
 
-set(:sidekiq_cmd) { "bundle exec sidekiq" }
-set(:sidekiq_role) { :app }
+set :sidekiq_cmd, "bundle exec sidekiq"
+set :sidekiq_role, :app
 
 namespace :deploy do
   %w[start stop restart].each do |command|
@@ -37,6 +37,7 @@ namespace :deploy do
     run "mkdir -p #{shared_path}/config"
     put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
     put File.read("config/application.example.yml"), "#{shared_path}/config/application.yml"
+    run "touch #{current_path}/tmp/pids/sidekiq.pid"
     puts "Now edit the config files in #{shared_path}."
   end
   after "deploy:setup", "deploy:setup_config"
