@@ -1,7 +1,7 @@
 require "bundler/capistrano"
 require 'sidekiq/capistrano'
 
-server "ec2-54-183-105-129.us-west-1.compute.amazonaws.com", :web, :app, :db, primary: true
+server "ec2-54-183-105-129.us-west-1.compute.amazonaws.com", :web, :app
 
 set :application, "demo"
 set :user, "ubuntu"
@@ -31,18 +31,17 @@ namespace :deploy do
     end
   end
 
-  task :setup_config, roles: :app do
+  task :setup_config, roles: :web do
     sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
     sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
     run "mkdir -p #{shared_path}/config"
     put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
     put File.read("config/application.example.yml"), "#{shared_path}/config/application.yml"
-    run "touch #{current_path}/tmp/pids/sidekiq.pid"
     puts "Now edit the config files in #{shared_path}."
   end
-  after "deploy:finalize_update", "deploy:setup_config"
+  after "deploy:setup", "deploy:setup_config"
 
-  task :symlink_config, roles: :app do
+  task :symlink_config, roles: :web do
     run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     run "ln -nfs #{shared_path}/config/application.yml #{release_path}/config/application.yml"
   end
@@ -58,6 +57,12 @@ namespace :deploy do
   end
   before "deploy", "deploy:check_revision"
   
+  desc "Fix sidekiq restart errors"
+  task :create_sidekiq_pid_file, roles: [:web, :app] do
+    run "touch #{current_path}/tmp/pids/sidekiq.pid"
+  end
+  before "deploy:restart", "deploy:create_sidekiq_pid_file"
+
   namespace :assets do
     desc "Precompile assets on local machine and upload them to the server."
     task :precompile, roles: :web, except: {no_release: true} do
