@@ -15,5 +15,8 @@
 /log/*.log
 /tmp
 /config/application.yml
+/config/database.yml
+/config/database.example.yml
+/config/application.example.yml
 /*.pem
 /public/assets
