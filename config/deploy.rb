@@ -61,15 +61,16 @@ namespace :deploy do
   task :create_sidekiq_pid_file, roles: [:web, :app] do
     run "touch #{current_path}/tmp/pids/sidekiq.pid"
   end
-  before "deploy:restart", "deploy:create_sidekiq_pid_file"
+  before "sidekiq:stop", "deploy:create_sidekiq_pid_file"
 
   namespace :assets do
     desc "Precompile assets on local machine and upload them to the server."
     task :precompile, roles: :web, except: {no_release: true} do
-      run_locally "bundle exec rake RAILS_ENV=production assets:clean"
+      run_locally "bundle exec rake RAILS_ENV=production assets:clobber"
       run_locally "bundle exec rake RAILS_ENV=production assets:precompile"
       find_servers_for_task(current_task).each do |server|
-        run_locally 'rsync -vr --exclude=".DS_Store" -e "ssh -i /Users/thanh/code/Demo/ThanhNguyen.pem" public/assets #{user}@#{server.host}:#{shared_path}/'
+        run "rm -rf #{shared_path}/assets"
+        run_locally "rsync -vr --exclude='.DS_Store' -e 'ssh -i /Users/thanh/code/Demo/ThanhNguyen.pem' public/assets #{user}@#{server.host}:#{shared_path}"
       end
     end
   end

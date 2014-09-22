@@ -1,0 +1,87 @@
+body {
+    width: 1000px;
+    margin: 0 auto !important;
+    font-family: Helvetica;
+}
+.timeLine {
+    width: 85px;
+    float: left;
+    text-align: right;
+    position: relative;
+    
+    .time {
+        height: 29.9px;
+        line-height: 29.9px;
+        margin: 0 5px;
+    }
+    .full {
+        color: #686868;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .period , .half {
+        font-size: 11px;
+        color: #A7A7A7;
+    }
+}
+.eventList {
+    width: 605px;
+    padding: 0 10px;
+    height: 720px;
+    background-color: #ECECEC;
+    float: left;
+    position: relative;
+    top: 15px;
+
+    .event {
+        position: absolute;
+        background-color: white;
+        border: #D6D6D6 solid 1px; 
+        border-left: #4b6ea9 solid 4px;
+        margin-left: 2px;
+        
+        .name {
+            color: #4C6FA9;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 1px 2px;
+        }
+
+        .location {
+            color: #797979;
+            font-size: 11px;
+            margin: 1px 3px;
+        }
+
+        .remove {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            opacity: 0;
+        }
+    }
+    .event:hover {
+        .remove {
+            opacity: 1;
+        }
+    }
+}
+
+.eventForm {
+    width: 300px;
+    float: left;
+    padding: 15px;
+
+    p {
+        margin: 10px 0 !important;
+    }
+}
+.clearFix {
+    clear: both;
+}
+.form-group {
+    margin-bottom: 5px !important;
+}
+.input-group {
+    width: 180px;
+}

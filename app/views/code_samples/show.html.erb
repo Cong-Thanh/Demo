@@ -2,9 +2,8 @@
 <html>
   <head>
     <title>Calendar</title>
-    <%= stylesheet_link_tag "/event" %>
-    <%= stylesheet_link_tag "/css/bootstrap" %>
-    <%= stylesheet_link_tag "/css/bootstrap-theme" %>
+    <%= stylesheet_link_tag "event" %>
+    <%= stylesheet_link_tag "bootstrap3/core" %>
     <%= javascript_include_tag "http://fb.me/react-0.11.1.js" %>
     <%= javascript_include_tag "http://fb.me/JSXTransformer-0.11.1.js" %>
   </head>
@@ -208,12 +207,12 @@
                 </div>
                 <div className="form-group">
                   <div className="input-group">
-                    <input type="number" ref="start" className="form-control" placeholder="Start" min="0" max="720"/>
+                    <input type="number" ref="start" className="form-control" placeholder="Start" min="0" max="720" required />
                   </div>
                 </div>
                 <div className="form-group">
                   <div className="input-group">
-                    <input type="number" ref="end" className="form-control" placeholder="End" min="0" max="720" />
+                    <input type="number" ref="end" className="form-control" placeholder="End" min="0" max="720" required />
                   </div>
                 </div>
                 <input type="submit" value="Add" className="btn btn-primary"/>
